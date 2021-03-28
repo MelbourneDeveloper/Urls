@@ -188,6 +188,9 @@ namespace Uris.UnitTests
             Assert.AreEqual(Port, uri.Port);
             Assert.AreEqual(PathPart1, uri.RequestUri.Path.Elements[0]);
             Assert.AreEqual(PathPart2, uri.RequestUri.Path.Elements[1]);
+            Assert.AreEqual(Fragment, uri.RequestUri.Fragment);
+            Assert.AreEqual(Username, uri.UserInfo?.Username);
+            Assert.AreEqual(Password, uri.UserInfo?.Password);
         }
 
     }
