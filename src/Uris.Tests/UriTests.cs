@@ -180,9 +180,12 @@ namespace Uris.UnitTests
             Assert.IsNotNull(uri);
             Assert.AreEqual(uri.Scheme, Scheme);
             Assert.AreEqual(uri.RequestUri.Fragment, Fragment);
-
-            //Break it
             Assert.AreEqual(uri.RequestUri.Query.Elements.First().FieldName, FieldName1);
+            Assert.AreEqual(uri.RequestUri.Query.Elements.First().Value, FieldValueEncoded1);
+            Assert.AreEqual(Host, uri.Host);
+            Assert.AreEqual(Port, uri.Port);
+            Assert.AreEqual(PathPart1, uri.RequestUri.Path.Elements[0]);
+            Assert.AreEqual(PathPart2, uri.RequestUri.Path.Elements[1]);
         }
 
     }
@@ -195,21 +198,21 @@ namespace Uris.UnitTests
 
             var userInfoTokens = uri.UserInfo.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var qps = new List<QueryParameter>();
+            var queryParametersList = new List<QueryParameter>();
             if (uri.Query != null && uri.Query.Length > 0)
             {
-                var queryParameters = uri.Query.Split(new char[] { '&' });
+                var queryParameterTokens = uri.Query.Split(new char[] { '&' });
 
-                foreach (var qpString in queryParameters)
+                foreach (var keyValueString in queryParameterTokens)
                 {
-                    var tokens = qpString.Substring(1).Split(new char[] { '=' });
+                    var keyAndValue = keyValueString.Substring(1).Split(new char[] { '=' });
 
-                    var qpp = new QueryParameter(
-                       tokens.First(),
-                       tokens.Length > 1 ? queryParameters[1] : null
+                    var queryParameter = new QueryParameter(
+                       keyAndValue.First(),
+                       keyAndValue.Length > 1 ? keyAndValue[1] : null
                        );
 
-                    qps.Add(qpp);
+                    queryParametersList.Add(queryParameter);
                 }
             }
 
@@ -218,7 +221,7 @@ namespace Uris.UnitTests
                     new RequestUriPath(
                         ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                         ),
-                    qps.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(qps.ToArray())),
+                    queryParametersList.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(queryParametersList.ToArray())),
                     uri.Fragment.Substring(1)
                     ),
                    uri.UserInfo != null ?
