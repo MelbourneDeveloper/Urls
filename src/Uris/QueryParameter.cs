@@ -3,7 +3,7 @@
     public record QueryParameter
     (
         string FieldName,
-        string Value
+        string? Value
     );
 }
 

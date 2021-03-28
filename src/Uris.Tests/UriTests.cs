@@ -1,10 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
 
 #pragma warning disable CA1055 // URI-like return values should not be strings
+#pragma warning disable IDE0057 // Use range operator
 
 namespace Uris.UnitTests
 {
@@ -193,17 +195,31 @@ namespace Uris.UnitTests
 
             var userInfoTokens = uri.UserInfo.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var qps = new List<QueryParameter>();
+            if (uri.Query != null && uri.Query.Length > 0)
+            {
+                var queryParameters = uri.Query.Split(new char[] { '&' });
+
+                foreach (var qpString in queryParameters)
+                {
+                    var tokens = qpString.Substring(1).Split(new char[] { '=' });
+
+                    var qpp = new QueryParameter(
+                       tokens.First(),
+                       tokens.Length > 1 ? queryParameters[1] : null
+                       );
+
+                    qps.Add(qpp);
+                }
+            }
+
             return new AbsoluteRequestUri(uri.Scheme, uri.Host, uri.Port,
                 new RelativeRequestUri(
                     new RequestUriPath(
                         ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                         ),
-                    Query.Empty,
-#if NET45
-                    uri.Fragment.Replace("#", "")
-#else
-                    uri.Fragment.Replace("#", "", StringComparison.OrdinalIgnoreCase)
-#endif
+                    qps.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(qps.ToArray())),
+                    uri.Fragment.Substring(1)
                     ),
                    uri.UserInfo != null ?
                    new UserInfo(userInfoTokens.First(),
