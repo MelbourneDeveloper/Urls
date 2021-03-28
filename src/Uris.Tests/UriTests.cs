@@ -182,6 +182,8 @@ namespace Uris.UnitTests
             Assert.AreEqual(uri.RequestUri.Fragment, Fragment);
             Assert.AreEqual(uri.RequestUri.Query.Elements.First().FieldName, FieldName1);
             Assert.AreEqual(uri.RequestUri.Query.Elements.First().Value, FieldValueEncoded1);
+            Assert.AreEqual(uri.RequestUri.Query.Elements[1].FieldName, FieldName2);
+            Assert.AreEqual(uri.RequestUri.Query.Elements[1].Value, FieldValueEncoded2);
             Assert.AreEqual(Host, uri.Host);
             Assert.AreEqual(Port, uri.Port);
             Assert.AreEqual(PathPart1, uri.RequestUri.Path.Elements[0]);
@@ -201,11 +203,11 @@ namespace Uris.UnitTests
             var queryParametersList = new List<QueryParameter>();
             if (uri.Query != null && uri.Query.Length > 0)
             {
-                var queryParameterTokens = uri.Query.Split(new char[] { '&' });
+                var queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
 
                 foreach (var keyValueString in queryParameterTokens)
                 {
-                    var keyAndValue = keyValueString.Substring(1).Split(new char[] { '=' });
+                    var keyAndValue = keyValueString.Split(new char[] { '=' });
 
                     var queryParameter = new QueryParameter(
                        keyAndValue.First(),
