@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-#pragma warning disable CA1055 // URI-like return values should not be strings
 #pragma warning disable IDE0057 // Use range operator
 
 namespace Uris

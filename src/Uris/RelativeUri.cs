@@ -1,9 +1,13 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
 
 namespace Uris
 {
+    /// <summary>
+    /// Represents a Uri without the Host, Scheme, Port or UserInfo 
+    /// </summary>
     public record RelativeUri
     (
          ImmutableList<string> Path,
@@ -12,10 +16,9 @@ namespace Uris
     )
     {
         public RelativeUri(
-        ImmutableList<string>? path = null,
-        Query? query = null) : this(path ?? ImmutableList<string>.Empty, query ?? Query.Empty, "")
+        IReadOnlyList<string>? path = null,
+        Query? query = null) : this(path != null ? path.ToImmutableList() : ImmutableList<string>.Empty, query ?? Query.Empty, "")
         {
-
         }
 
         public static RelativeUri Empty { get; } = new(ImmutableList<string>.Empty, Query.Empty);
