@@ -17,7 +17,9 @@ namespace Uris
     {
         public RelativeUri(
         IReadOnlyList<string>? path = null,
-        ImmutableList<QueryParameter>? query = null) : this(path != null ? path.ToImmutableList() : ImmutableList<string>.Empty, query ?? ImmutableList<QueryParameter>.Empty, "")
+        IReadOnlyList<QueryParameter>? query = null,
+        string? fragment = null) : this(path != null ? path.ToImmutableList() :
+        ImmutableList<string>.Empty, query?.ToImmutableList() ?? ImmutableList<QueryParameter>.Empty, fragment ?? "")
         {
         }
 
