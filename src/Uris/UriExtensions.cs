@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 
 #pragma warning disable CA1055 // URI-like return values should not be strings
+#pragma warning disable IDE0057 // Use range operator
 
 namespace Uris
 {
@@ -17,22 +18,27 @@ namespace Uris
             var userInfoTokens = uri.UserInfo.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
             var queryParametersList = new List<QueryParameter>();
-            if (uri.Query != null && uri.Query.Length > 0)
+            if (uri.Query.Length <= 0)
             {
-                var queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
-
-                foreach (var keyValueString in queryParameterTokens)
-                {
-                    var keyAndValue = keyValueString.Split(new char[] { '=' });
-
-                    var queryParameter = new QueryParameter(
-                       keyAndValue.First(),
-                       keyAndValue.Length > 1 ? keyAndValue[1] : null
-                       );
-
-                    queryParametersList.Add(queryParameter);
-                }
+                return new AbsoluteRequestUri(uri.Scheme, uri.Host, uri.Port,
+                    new RelativeRequestUri(
+                        new RequestUriPath(
+                            ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' },
+                                StringSplitOptions.RemoveEmptyEntries))
+                        ),
+                        queryParametersList.Count == 0
+                            ? Query.Empty
+                            : new Query(ImmutableList.Create(queryParametersList.ToArray())),
+                        uri.Fragment.Substring(1)
+                    ),
+                    new UserInfo(userInfoTokens.First(),
+                        userInfoTokens.Length > 1 ? userInfoTokens[1] : ""));
             }
+
+            var queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
+
+            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
+                => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
 
             return new AbsoluteRequestUri(uri.Scheme, uri.Host, uri.Port,
                 new RelativeRequestUri(
@@ -42,9 +48,8 @@ namespace Uris
                     queryParametersList.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(queryParametersList.ToArray())),
                     uri.Fragment.Substring(1)
                     ),
-                   uri.UserInfo != null ?
                    new UserInfo(userInfoTokens.First(),
-                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : null);
+                       userInfoTokens.Length > 1 ? userInfoTokens[1] : ""));
         }
 
         public static AbsoluteRequestUri With(this AbsoluteRequestUri absoluteRequestUri, RelativeRequestUri relativeRequestUri)
