@@ -52,21 +52,21 @@ namespace Uris.UnitTests
                 uriString);
         }
 
-        //[TestMethod]
-        //public void Test2()
-        //{
-        //    var uriString =
-        //        new AbsoluteUri(Scheme, Host, Port)
-        //        .WithQueryParameters(FieldName1, FieldValue1)
-        //        .WithCredentials(Username, Password)
-        //        .WithQueryParameters(FieldName2, FieldValue2)
-        //        .WithFragment(Fragment);
+        [TestMethod]
+        public void TestComposition()
+        {
+            var uri =
+                new AbsoluteUri(Scheme, Host, Port)
+                .WithQueryParameters(FieldName1, FieldValue1)
+                .WithCredentials(Username, Password)
+                .WithQueryParameters(FieldName2, FieldValue2)
+                .WithFragment(Fragment)
+                .WithPath(PathPart1, PathPart2);
 
-
-        //    Assert.AreEqual(
-        //        expected,
-        //        uriString);
-        //}
+            Assert.AreEqual(
+                expected,
+                uri.ToString());
+        }
 
         [TestMethod]
         public void TestAbsoluteWithRelative()

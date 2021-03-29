@@ -51,8 +51,7 @@ namespace Uris
         public static AbsoluteUri WithQueryParameters(this AbsoluteUri uri, string fieldName, string value)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        new(uri.Scheme, uri.Host, uri.Port,
-            uri.RequestUri with { QueryParameters = uri.RequestUri.QueryParameters.Add(new QueryParameter(fieldName, value)) });
+        uri with { RequestUri = uri.RequestUri with { QueryParameters = uri.RequestUri.QueryParameters.Add(new QueryParameter(fieldName, value)) } };
 
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
@@ -77,11 +76,20 @@ namespace Uris
         public static AbsoluteUri WithCredentials(this AbsoluteUri uri, string username, string password)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        uri with { UserInfo = uri.UserInfo with { Username = username, Password = password } };
+        uri with { UserInfo = new(username, password) };
 
         public static AbsoluteUri WithFragment(this AbsoluteUri uri, string fragment)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
         uri with { RequestUri = uri.RequestUri with { Fragment = fragment } };
+
+        public static AbsoluteUri WithPath(this AbsoluteUri uri, IReadOnlyList<string> pathSegments)
+        =>
+        uri == null ? throw new ArgumentNullException(nameof(uri)) :
+        uri with { RequestUri = uri.RequestUri with { Path = pathSegments.ToImmutableList() } };
+
+        public static AbsoluteUri WithPath(this AbsoluteUri uri, params string[] pathSegments)
+        => WithPath(uri, pathSegments.ToList());
+
     }
 }
