@@ -112,12 +112,12 @@ namespace Uris.UnitTests
 
             Assert.AreEqual(
             FieldName1,
-            absoluteRequestUri?.RequestUri?.QueryParameters?.First().FieldName
+            absoluteRequestUri.RequestUri.QueryParameters.First().FieldName
             );
 
             Assert.AreEqual(
             FieldValue1,
-            absoluteRequestUri?.RequestUri?.QueryParameters?.First().Value
+            absoluteRequestUri.RequestUri.QueryParameters.First().Value
             );
         }
 
