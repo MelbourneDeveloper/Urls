@@ -13,26 +13,11 @@ namespace Uris
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
 
-            var userInfoTokens = uri.UserInfo.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+            var userInfoTokens = uri.UserInfo?.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
             var queryParametersList = new List<QueryParameter>();
-            if (uri.Query.Length <= 0)
-            {
-                return new AbsoluteUri(uri.Scheme, uri.Host, uri.Port,
-                    new RelativeUri(
-                            ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' },
-                                StringSplitOptions.RemoveEmptyEntries))
-                        ,
-                        queryParametersList.Count == 0
-                            ? ImmutableList<QueryParameter>.Empty
-                            : queryParametersList.ToImmutableList(),
-                        uri.Fragment.Substring(1)
-                    ),
-                    new UserInfo(userInfoTokens.First(),
-                        userInfoTokens.Length > 1 ? userInfoTokens[1] : ""));
-            }
 
-            var queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
+            var queryParameterTokens = (uri.Query ?? "").Substring(1).Split(new char[] { '&' });
 
             queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
@@ -44,8 +29,8 @@ namespace Uris
                     queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
                     uri.Fragment.Substring(1)
                     ),
-                   new UserInfo(userInfoTokens.First(),
-                       userInfoTokens.Length > 1 ? userInfoTokens[1] : ""));
+                   userInfoTokens != null ? new UserInfo(userInfoTokens.First(),
+                       userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : null);
         }
 
         public static AbsoluteUri With(this AbsoluteUri absoluteRequestUri, RelativeUri relativeRequestUri)
