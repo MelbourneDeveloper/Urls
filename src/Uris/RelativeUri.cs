@@ -11,7 +11,7 @@ namespace Uris
     public record RelativeUri
     (
          ImmutableList<string> Path,
-         ImmutableList<QueryParameter> Query,
+         ImmutableList<QueryParameter> QueryParameters,
          string Fragment
     )
     {
@@ -26,7 +26,7 @@ namespace Uris
         public override string ToString()
         =>
         (Path.Count > 0 ? $"/{string.Join("/", Path)}" : "") +
-        (Query.Count > 0 ? $"?{string.Join("&", Query.Select(e => $"{e.FieldName}={WebUtility.UrlEncode(e.Value)}"))}" : "") +
+        (QueryParameters.Count > 0 ? $"?{string.Join("&", QueryParameters.Select(e => $"{e.FieldName}={WebUtility.UrlEncode(e.Value)}"))}" : "") +
         (!string.IsNullOrEmpty(Fragment) ? $"#{Fragment}" : "");
     };
 }

@@ -56,7 +56,7 @@ namespace Uris
         public static RelativeUri WithFragment(this RelativeUri uri, string fragment)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        new(uri.Path, uri.Query, fragment);
+        new(uri.Path, uri.QueryParameters, fragment);
 
         public static RelativeUri WithQueryString(this RelativeUri uri, string fieldName, string value)
         =>
