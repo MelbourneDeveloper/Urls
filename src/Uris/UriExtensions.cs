@@ -56,5 +56,22 @@ namespace Uris
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
         public static ImmutableList<QueryParameter> ToQuery(this QueryParameter queryParameter) => ImmutableList.Create(queryParameter);
+
+
+        public static RelativeUri WithQueryParamers<T>(this RelativeUri relativeUri, T item)
+        =>
+        relativeUri == null ? throw new ArgumentNullException(nameof(relativeUri)) :
+            relativeUri with
+            {
+                QueryParameters =
+                typeof(T)
+                .GetProperties()
+                .Select(propertyInfo
+                => new QueryParameter(
+                    propertyInfo.Name,
+                    propertyInfo.GetValue(item)?.ToString())
+                ).ToImmutableList()
+            };
+
     }
 }

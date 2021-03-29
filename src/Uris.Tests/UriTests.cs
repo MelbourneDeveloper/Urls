@@ -5,6 +5,8 @@ using System.Linq;
 
 #pragma warning disable CA1055 // URI-like return values should not be strings
 #pragma warning disable IDE0057 // Use range operator
+#pragma warning disable IDE0050 // Convert to tuple
+#pragma warning disable CA1305 // Specify IFormatProvider
 
 namespace Uris.UnitTests
 {
@@ -145,6 +147,25 @@ namespace Uris.UnitTests
             Assert.AreEqual(uri.Scheme, Scheme);
         }
 
+        [TestMethod]
+        public void TestWithQueryParams()
+        {
+            var item = new
+            {
+                somelongstring = "gvhhvhgfgfdg7676878",
+                count = 50,
+                message = "This is a sentence"
+            };
+
+            var relativeUri = RelativeUri.Empty.WithQueryParamers(item);
+
+            Assert.AreEqual(item.somelongstring, relativeUri.QueryParameters[0].Value);
+            Assert.AreEqual(nameof(item.somelongstring), relativeUri.QueryParameters[0].FieldName);
+            Assert.AreEqual(item.count.ToString(), relativeUri.QueryParameters[1].Value);
+            Assert.AreEqual(nameof(item.count), relativeUri.QueryParameters[1].FieldName);
+            Assert.AreEqual(item.message, relativeUri.QueryParameters[2].Value);
+            Assert.AreEqual(nameof(item.message), relativeUri.QueryParameters[2].FieldName);
+        }
 
         [TestMethod]
         public void TestFromUri()
