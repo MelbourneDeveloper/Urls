@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
@@ -15,17 +16,31 @@ namespace Uris
 
             var userInfoTokens = uri.UserInfo.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var queryParametersList = new List<QueryParameter>();
+            if (uri.Query != null && uri.Query.Length > 0)
+            {
+                var queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
+
+                foreach (var keyValueString in queryParameterTokens)
+                {
+                    var keyAndValue = keyValueString.Split(new char[] { '=' });
+
+                    var queryParameter = new QueryParameter(
+                       keyAndValue.First(),
+                       keyAndValue.Length > 1 ? keyAndValue[1] : null
+                       );
+
+                    queryParametersList.Add(queryParameter);
+                }
+            }
+
             return new AbsoluteRequestUri(uri.Scheme, uri.Host, uri.Port,
                 new RelativeRequestUri(
                     new RequestUriPath(
                         ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                         ),
-                    Query.Empty,
-#if NET45 || NETSTANDARD2_0
-                    uri.Fragment.Replace("#", "")
-#else
-                    uri.Fragment.Replace("#", "", StringComparison.OrdinalIgnoreCase)
-#endif
+                    queryParametersList.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(queryParametersList.ToArray())),
+                    uri.Fragment.Substring(1)
                     ),
                    uri.UserInfo != null ?
                    new UserInfo(userInfoTokens.First(),
