@@ -38,7 +38,7 @@ namespace Uris.UnitTests
                             new QueryParameter(FieldName2, FieldValue2)
                             )
                     ), Fragment),
-                    new UserInfo(Username, Password)).ToUriString();
+                    new UserInfo(Username, Password)).ToString();
 
             var expected = $"{Scheme}://{Username}:{Password}@{Host}:{Port}/{PathPart1}/{PathPart2}?" +
                 $"{FieldName1}={FieldValueEncoded1}&{FieldName2}={FieldValueEncoded2}#{Fragment}";
@@ -126,7 +126,7 @@ namespace Uris.UnitTests
 
         [TestMethod]
         public void TestMinimalAbsoluteToString()
-        => Assert.AreEqual("https://test.com", new AbsoluteUri("https", "test.com").ToUriString());
+        => Assert.AreEqual("https://test.com", new AbsoluteUri("https", "test.com").ToString());
 
         [TestMethod]
         public void TestConstructUri()
@@ -141,7 +141,7 @@ namespace Uris.UnitTests
                             new QueryParameter(FieldName2, FieldValue2)
                             )
                     ), Fragment),
-                    new UserInfo(Username, Password)).ToUriString();
+                    new UserInfo(Username, Password)).ToString();
 
             var uri = new Uri(uriString, UriKind.Absolute);
 
@@ -162,7 +162,7 @@ namespace Uris.UnitTests
                             new QueryParameter(FieldName2, FieldValue2)
                             )
                     ), Fragment),
-                    new UserInfo(Username, Password)).ToUriString();
+                    new UserInfo(Username, Password)).ToString();
 
             var uri = new Uri(uriString, UriKind.Absolute).ToAbsoluteRequestUri();
 

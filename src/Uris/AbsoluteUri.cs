@@ -18,6 +18,14 @@
         {
 
         }
+
+        public override string ToString()
+        =>
+        $"{Scheme}://" +
+        $"{(UserInfo != null ? $"{UserInfo.Username}:{UserInfo.Password}@" : "")}" +
+        $"{Host}" +
+        (Port.HasValue ? $":{Port.Value}" : "") +
+        RequestUri;
     };
 }
 

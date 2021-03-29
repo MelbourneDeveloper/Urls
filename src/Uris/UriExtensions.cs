@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Net;
 
 #pragma warning disable CA1055 // URI-like return values should not be strings
 #pragma warning disable IDE0057 // Use range operator
@@ -73,21 +72,5 @@ namespace Uris
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
         public static Query ToQuery(this QueryParameter queryParameter) => new(Elements: ImmutableList.Create(queryParameter));
-
-        public static string ToUriString(this RelativeUri relativeRequestUri)
-        =>
-        relativeRequestUri == null ? throw new ArgumentNullException(nameof(relativeRequestUri)) :
-        (relativeRequestUri.Path.Count > 0 ? $"/{string.Join("/", relativeRequestUri.Path)}" : "") +
-        (relativeRequestUri.Query.Elements.Count > 0 ? $"?{string.Join("&", relativeRequestUri.Query.Elements.Select(e => $"{e.FieldName}={WebUtility.UrlEncode(e.Value)}"))}" : "") +
-        (!string.IsNullOrEmpty(relativeRequestUri.Fragment) ? $"#{relativeRequestUri.Fragment}" : "");
-
-        public static string ToUriString(this AbsoluteUri absoluteRequestUri)
-        =>
-        absoluteRequestUri == null ? throw new ArgumentNullException(nameof(absoluteRequestUri)) :
-        $"{absoluteRequestUri.Scheme}://" +
-        $"{(absoluteRequestUri.UserInfo != null ? $"{absoluteRequestUri.UserInfo.Username}:{absoluteRequestUri.UserInfo.Password}@" : "")}" +
-        $"{absoluteRequestUri.Host}" +
-        (absoluteRequestUri.Port.HasValue ? $":{absoluteRequestUri.Port.Value}" : "") +
-        absoluteRequestUri.RequestUri.ToUriString();
     }
 }
