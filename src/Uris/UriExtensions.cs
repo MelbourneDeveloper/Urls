@@ -11,7 +11,7 @@ namespace Uris
 {
     public static class UriExtensions
     {
-        public static AbsoluteRequestUri ToAbsoluteRequestUri(this Uri uri)
+        public static AbsoluteUri ToAbsoluteRequestUri(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
 
@@ -20,12 +20,11 @@ namespace Uris
             var queryParametersList = new List<QueryParameter>();
             if (uri.Query.Length <= 0)
             {
-                return new AbsoluteRequestUri(uri.Scheme, uri.Host, uri.Port,
-                    new RelativeRequestUri(
-                        new RequestUriPath(
+                return new AbsoluteUri(uri.Scheme, uri.Host, uri.Port,
+                    new RelativeUri(
                             ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' },
                                 StringSplitOptions.RemoveEmptyEntries))
-                        ),
+                        ,
                         queryParametersList.Count == 0
                             ? Query.Empty
                             : new Query(ImmutableList.Create(queryParametersList.ToArray())),
@@ -40,11 +39,10 @@ namespace Uris
             queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
 
-            return new AbsoluteRequestUri(uri.Scheme, uri.Host, uri.Port,
-                new RelativeRequestUri(
-                    new RequestUriPath(
+            return new AbsoluteUri(uri.Scheme, uri.Host, uri.Port,
+                new RelativeUri(
                         ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
-                        ),
+                        ,
                     queryParametersList.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(queryParametersList.ToArray())),
                     uri.Fragment.Substring(1)
                     ),
@@ -52,38 +50,38 @@ namespace Uris
                        userInfoTokens.Length > 1 ? userInfoTokens[1] : ""));
         }
 
-        public static AbsoluteRequestUri With(this AbsoluteRequestUri absoluteRequestUri, RelativeRequestUri relativeRequestUri)
+        public static AbsoluteUri With(this AbsoluteUri absoluteRequestUri, RelativeUri relativeRequestUri)
         =>
         absoluteRequestUri == null ? throw new ArgumentNullException(nameof(absoluteRequestUri)) :
-        new AbsoluteRequestUri(absoluteRequestUri.Scheme, absoluteRequestUri.Host, absoluteRequestUri.Port, relativeRequestUri, absoluteRequestUri.UserInfo);
+        new AbsoluteUri(absoluteRequestUri.Scheme, absoluteRequestUri.Host, absoluteRequestUri.Port, relativeRequestUri, absoluteRequestUri.UserInfo);
 
-        public static RelativeRequestUri WithFragment(this RelativeRequestUri uri, string fragment)
+        public static RelativeUri WithFragment(this RelativeUri uri, string fragment)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
         new(uri.Path, uri.Query, fragment);
 
-        public static RelativeRequestUri WithQueryString(this RelativeRequestUri uri, string fieldName, string value)
+        public static RelativeUri WithQueryString(this RelativeUri uri, string fieldName, string value)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
         new(uri.Path, fieldName.ToQueryParameter(value).ToQuery(), uri.Fragment);
 
-        public static AbsoluteRequestUri WithQueryString(this AbsoluteRequestUri uri, string fieldName, string value)
+        public static AbsoluteUri WithQueryString(this AbsoluteUri uri, string fieldName, string value)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        new(uri.Scheme, uri.Host, uri.Port, new RelativeRequestUri(RequestUriPath.Empty).WithQueryString(fieldName, value));
+        new(uri.Scheme, uri.Host, uri.Port, new RelativeUri().WithQueryString(fieldName, value));
 
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
         public static Query ToQuery(this QueryParameter queryParameter) => new(Elements: ImmutableList.Create(queryParameter));
 
-        public static string ToUriString(this RelativeRequestUri relativeRequestUri)
+        public static string ToUriString(this RelativeUri relativeRequestUri)
         =>
         relativeRequestUri == null ? throw new ArgumentNullException(nameof(relativeRequestUri)) :
-        (relativeRequestUri.Path.Elements.Count > 0 ? $"/{string.Join("/", relativeRequestUri.Path.Elements)}" : "") +
+        (relativeRequestUri.Path.Count > 0 ? $"/{string.Join("/", relativeRequestUri.Path)}" : "") +
         (relativeRequestUri.Query.Elements.Count > 0 ? $"?{string.Join("&", relativeRequestUri.Query.Elements.Select(e => $"{e.FieldName}={WebUtility.UrlEncode(e.Value)}"))}" : "") +
         (!string.IsNullOrEmpty(relativeRequestUri.Fragment) ? $"#{relativeRequestUri.Fragment}" : "");
 
-        public static string ToUriString(this AbsoluteRequestUri absoluteRequestUri)
+        public static string ToUriString(this AbsoluteUri absoluteRequestUri)
         =>
         absoluteRequestUri == null ? throw new ArgumentNullException(nameof(absoluteRequestUri)) :
         $"{absoluteRequestUri.Scheme}://" +

@@ -1,9 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Net;
 
 #pragma warning disable CA1055 // URI-like return values should not be strings
 #pragma warning disable IDE0057 // Use range operator
@@ -31,11 +29,9 @@ namespace Uris.UnitTests
         [TestMethod]
         public void Test()
         {
-            var uriString = new AbsoluteRequestUri(Scheme, Host, Port,
-                new RelativeRequestUri(
-                    new RequestUriPath(
-                        ImmutableList.Create(PathPart1, PathPart2)
-                        ),
+            var uriString = new AbsoluteUri(Scheme, Host, Port,
+                new RelativeUri(
+                        ImmutableList.Create(PathPart1, PathPart2),
                     new Query(
                         ImmutableList.Create(
                             new QueryParameter(FieldName1, FieldValue1),
@@ -55,12 +51,10 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestAbsoluteWithRelative()
         {
-            var absolute = new AbsoluteRequestUri(Scheme, Host);
+            var absolute = new AbsoluteUri(Scheme, Host);
 
-            var relativeRequestUri = new RelativeRequestUri(
-                                new RequestUriPath(
-                                    ImmutableList.Create(PathPart1, PathPart2)
-                                    ),
+            var relativeRequestUri = new RelativeUri(
+                                    ImmutableList.Create(PathPart1, PathPart2),
                                 new Query(
                                     ImmutableList.Create(
                                         new QueryParameter(FieldName1, FieldValue1),
@@ -78,10 +72,8 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestRelativeWithFragment()
         {
-            var relativeRequestUri = new RelativeRequestUri(
-                                new RequestUriPath(
-                                    ImmutableList.Create(PathPart1, PathPart2)
-                                    ),
+            var relativeRequestUri = new RelativeUri(
+                                    ImmutableList.Create(PathPart1, PathPart2),
                                 new Query(
                                     ImmutableList.Create(
                                         new QueryParameter(FieldName1, FieldValue1),
@@ -101,7 +93,7 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestWithQueryStringStrings()
         {
-            var relativeRequestUri = RelativeRequestUri.Empty.WithQueryString(FieldName1, FieldValue1);
+            var relativeRequestUri = RelativeUri.Empty.WithQueryString(FieldName1, FieldValue1);
 
             Assert.AreEqual(
             FieldName1,
@@ -117,7 +109,7 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestAbsoluteWithQueryStringStrings()
         {
-            var absoluteRequestUri = new AbsoluteRequestUri("https", "test.com");
+            var absoluteRequestUri = new AbsoluteUri("https", "test.com");
 
             absoluteRequestUri = absoluteRequestUri.WithQueryString(FieldName1, FieldValue1);
 
@@ -134,16 +126,15 @@ namespace Uris.UnitTests
 
         [TestMethod]
         public void TestMinimalAbsoluteToString()
-        => Assert.AreEqual("https://test.com", new AbsoluteRequestUri("https", "test.com").ToUriString());
+        => Assert.AreEqual("https://test.com", new AbsoluteUri("https", "test.com").ToUriString());
 
         [TestMethod]
         public void TestConstructUri()
         {
-            var uriString = new AbsoluteRequestUri(Scheme, Host, Port,
-                new RelativeRequestUri(
-                    new RequestUriPath(
+            var uriString = new AbsoluteUri(Scheme, Host, Port,
+                new RelativeUri(
                         ImmutableList.Create(PathPart1, PathPart2)
-                        ),
+                        ,
                     new Query(
                         ImmutableList.Create(
                             new QueryParameter(FieldName1, FieldValue1),
@@ -162,11 +153,9 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestFromUri()
         {
-            var uriString = new AbsoluteRequestUri(Scheme, Host, Port,
-                new RelativeRequestUri(
-                    new RequestUriPath(
-                        ImmutableList.Create(PathPart1, PathPart2)
-                        ),
+            var uriString = new AbsoluteUri(Scheme, Host, Port,
+                new RelativeUri(
+                        ImmutableList.Create(PathPart1, PathPart2),
                     new Query(
                         ImmutableList.Create(
                             new QueryParameter(FieldName1, FieldValue1),
@@ -186,8 +175,8 @@ namespace Uris.UnitTests
             Assert.AreEqual(uri.RequestUri.Query.Elements[1].Value, FieldValueEncoded2);
             Assert.AreEqual(Host, uri.Host);
             Assert.AreEqual(Port, uri.Port);
-            Assert.AreEqual(PathPart1, uri.RequestUri.Path.Elements[0]);
-            Assert.AreEqual(PathPart2, uri.RequestUri.Path.Elements[1]);
+            Assert.AreEqual(PathPart1, uri.RequestUri.Path[0]);
+            Assert.AreEqual(PathPart2, uri.RequestUri.Path[1]);
             Assert.AreEqual(Fragment, uri.RequestUri.Fragment);
             Assert.AreEqual(Username, uri.UserInfo?.Username);
             Assert.AreEqual(Password, uri.UserInfo?.Password);
