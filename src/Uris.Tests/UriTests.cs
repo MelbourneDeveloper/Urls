@@ -73,7 +73,7 @@ namespace Uris.UnitTests
         {
             var absolute = new AbsoluteUri(Scheme, Host);
 
-            var relativeRequestUri = new RelativeUri(
+            var relativeRelativeUri = new RelativeUri(
                                     ImmutableList.Create(PathPart1, PathPart2),
                                     ImmutableList.Create(
                                         new QueryParameter(FieldName1, FieldValue1),
@@ -81,17 +81,17 @@ namespace Uris.UnitTests
                                         )
                                 );
 
-            absolute = absolute.With(relativeRequestUri);
+            absolute = absolute.With(relativeRelativeUri);
 
             Assert.AreEqual(
-                relativeRequestUri.Fragment,
-                absolute.RequestUri?.Fragment);
+                relativeRelativeUri.Fragment,
+                absolute.RelativeUri.Fragment);
         }
 
         [TestMethod]
         public void TestRelativeWithFragment()
         {
-            var relativeRequestUri = new RelativeUri(
+            var relativeRelativeUri = new RelativeUri(
                                     ImmutableList.Create(PathPart1, PathPart2),
                                     ImmutableList.Create(
                                         new QueryParameter(FieldName1, FieldValue1),
@@ -101,44 +101,44 @@ namespace Uris.UnitTests
 
             const string frag = "test";
 
-            relativeRequestUri = relativeRequestUri.WithFragment(frag);
+            relativeRelativeUri = relativeRelativeUri.WithFragment(frag);
 
             Assert.AreEqual(
                 frag,
-                relativeRequestUri.Fragment);
+                relativeRelativeUri.Fragment);
         }
 
         [TestMethod]
         public void TestWithQueryStringStrings()
         {
-            var relativeRequestUri = RelativeUri.Empty.WithQueryString(FieldName1, FieldValue1);
+            var relativeRelativeUri = RelativeUri.Empty.WithQueryString(FieldName1, FieldValue1);
 
             Assert.AreEqual(
             FieldName1,
-            relativeRequestUri.QueryParameters?.First().FieldName
+            relativeRelativeUri.QueryParameters?.First().FieldName
             );
 
             Assert.AreEqual(
             FieldValue1,
-            relativeRequestUri.QueryParameters?.First().Value
+            relativeRelativeUri.QueryParameters?.First().Value
             );
         }
 
         [TestMethod]
         public void TestAbsoluteWithQueryStringStrings()
         {
-            var absoluteRequestUri = new AbsoluteUri("https", "test.com");
+            var absoluteRelativeUri = new AbsoluteUri("https", "test.com");
 
-            absoluteRequestUri = absoluteRequestUri.WithQueryParameters(FieldName1, FieldValue1);
+            absoluteRelativeUri = absoluteRelativeUri.WithQueryParameters(FieldName1, FieldValue1);
 
             Assert.AreEqual(
             FieldName1,
-            absoluteRequestUri.RequestUri.QueryParameters.First().FieldName
+            absoluteRelativeUri.RelativeUri.QueryParameters.First().FieldName
             );
 
             Assert.AreEqual(
             FieldValue1,
-            absoluteRequestUri.RequestUri.QueryParameters.First().Value
+            absoluteRelativeUri.RelativeUri.QueryParameters.First().Value
             );
         }
 
@@ -199,20 +199,20 @@ namespace Uris.UnitTests
                     , Fragment),
                     new UserInfo(Username, Password)).ToString();
 
-            var uri = new Uri(uriString, UriKind.Absolute).ToAbsoluteRequestUri();
+            var uri = new Uri(uriString, UriKind.Absolute).ToAbsoluteUri();
 
             Assert.IsNotNull(uri);
             Assert.AreEqual(uri.Scheme, Scheme);
-            Assert.AreEqual(uri.RequestUri.Fragment, Fragment);
-            Assert.AreEqual(uri.RequestUri.QueryParameters.First().FieldName, FieldName1);
-            Assert.AreEqual(uri.RequestUri.QueryParameters.First().Value, FieldValueEncoded1);
-            Assert.AreEqual(uri.RequestUri.QueryParameters[1].FieldName, FieldName2);
-            Assert.AreEqual(uri.RequestUri.QueryParameters[1].Value, FieldValueEncoded2);
+            Assert.AreEqual(uri.RelativeUri.Fragment, Fragment);
+            Assert.AreEqual(uri.RelativeUri.QueryParameters.First().FieldName, FieldName1);
+            Assert.AreEqual(uri.RelativeUri.QueryParameters.First().Value, FieldValueEncoded1);
+            Assert.AreEqual(uri.RelativeUri.QueryParameters[1].FieldName, FieldName2);
+            Assert.AreEqual(uri.RelativeUri.QueryParameters[1].Value, FieldValueEncoded2);
             Assert.AreEqual(Host, uri.Host);
             Assert.AreEqual(Port, uri.Port);
-            Assert.AreEqual(PathPart1, uri.RequestUri.Path[0]);
-            Assert.AreEqual(PathPart2, uri.RequestUri.Path[1]);
-            Assert.AreEqual(Fragment, uri.RequestUri.Fragment);
+            Assert.AreEqual(PathPart1, uri.RelativeUri.Path[0]);
+            Assert.AreEqual(PathPart2, uri.RelativeUri.Path[1]);
+            Assert.AreEqual(Fragment, uri.RelativeUri.Fragment);
             Assert.AreEqual(Username, uri.UserInfo?.Username);
             Assert.AreEqual(Password, uri.UserInfo?.Password);
         }

@@ -5,7 +5,7 @@
         string Scheme,
         string Host,
         int? Port,
-        RelativeUri RequestUri,
+        RelativeUri RelativeUri,
         UserInfo UserInfo
     )
     {
@@ -25,7 +25,7 @@
         $"{(!string.IsNullOrEmpty(UserInfo.Username) ? $"{UserInfo.Username}:{UserInfo.Password}@" : "")}" +
         $"{Host}" +
         (Port.HasValue ? $":{Port.Value}" : "") +
-        RequestUri;
+        RelativeUri;
     };
 }
 
