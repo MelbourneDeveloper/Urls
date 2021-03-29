@@ -91,5 +91,15 @@ namespace Uris
         public static AbsoluteUri WithPath(this AbsoluteUri uri, params string[] pathSegments)
         => WithPath(uri, pathSegments.ToList());
 
+        public static AbsoluteUri ToHttpUriFromHost(this string host, int? port = null)
+        =>
+        host == null ? throw new ArgumentNullException(nameof(host)) :
+                new AbsoluteUri("http", host, port);
+
+        public static AbsoluteUri ToHttpsUriFromHost(this string host, int? port = null)
+        =>
+        host == null ? throw new ArgumentNullException(nameof(host)) :
+                new AbsoluteUri("https", host, port);
+
     }
 }

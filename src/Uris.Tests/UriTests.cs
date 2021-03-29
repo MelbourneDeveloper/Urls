@@ -69,6 +69,32 @@ namespace Uris.UnitTests
         }
 
         [TestMethod]
+        public void TestComposition2()
+        {
+            var uri =
+                Host.ToHttpUriFromHost(Port)
+                .WithQueryParameters(FieldName1, FieldValue1)
+                .WithCredentials(Username, Password)
+                .WithQueryParameters(FieldName2, FieldValue2)
+                .WithFragment(Fragment)
+                .WithPath(PathPart1, PathPart2);
+
+            Assert.AreEqual(
+                expected,
+                uri.ToString());
+        }
+
+        [TestMethod]
+        public void TestComposition3()
+        {
+            var uri = Host.ToHttpsUriFromHost();
+
+            Assert.AreEqual(
+                $"https://{Host}",
+                uri.ToString());
+        }
+
+        [TestMethod]
         public void TestAbsoluteWithRelative()
         {
             var absolute = new AbsoluteUri(Scheme, Host);
