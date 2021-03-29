@@ -28,6 +28,11 @@ namespace Uris.UnitTests
         private const string Username = "username";
         private const string Password = "password";
 
+        private readonly string expected = $"{Scheme}://{Username}:{Password}@{Host}:{Port}/{PathPart1}/{PathPart2}?" +
+            $"{FieldName1}={FieldValueEncoded1}&{FieldName2}={FieldValueEncoded2}#{Fragment}";
+
+
+
         [TestMethod]
         public void Test()
         {
@@ -41,13 +46,27 @@ namespace Uris.UnitTests
                     , Fragment),
                     new UserInfo(Username, Password)).ToString();
 
-            var expected = $"{Scheme}://{Username}:{Password}@{Host}:{Port}/{PathPart1}/{PathPart2}?" +
-                $"{FieldName1}={FieldValueEncoded1}&{FieldName2}={FieldValueEncoded2}#{Fragment}";
 
             Assert.AreEqual(
                 expected,
                 uriString);
         }
+
+        //[TestMethod]
+        //public void Test2()
+        //{
+        //    var uriString =
+        //        new AbsoluteUri(Scheme, Host, Port)
+        //        .WithQueryParameters(FieldName1, FieldValue1)
+        //        .WithCredentials(Username, Password)
+        //        .WithQueryParameters(FieldName2, FieldValue2)
+        //        .WithFragment(Fragment);
+
+
+        //    Assert.AreEqual(
+        //        expected,
+        //        uriString);
+        //}
 
         [TestMethod]
         public void TestAbsoluteWithRelative()
@@ -110,7 +129,7 @@ namespace Uris.UnitTests
         {
             var absoluteRequestUri = new AbsoluteUri("https", "test.com");
 
-            absoluteRequestUri = absoluteRequestUri.WithQueryString(FieldName1, FieldValue1);
+            absoluteRequestUri = absoluteRequestUri.WithQueryParameters(FieldName1, FieldValue1);
 
             Assert.AreEqual(
             FieldName1,

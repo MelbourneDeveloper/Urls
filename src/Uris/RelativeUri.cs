@@ -30,8 +30,6 @@ namespace Uris
         (Path.Count > 0 ? $"/{string.Join("/", Path)}" : "") +
         (QueryParameters.Count > 0 ? $"?{string.Join("&", QueryParameters.Select(e => $"{e.FieldName}={WebUtility.UrlEncode(e.Value)}"))}" : "") +
         (!string.IsNullOrEmpty(Fragment) ? $"#{Fragment}" : "");
-
-
     }
 }
 

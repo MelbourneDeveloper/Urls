@@ -30,7 +30,7 @@ namespace Uris
                     uri.Fragment.Substring(1)
                     ),
                    userInfoTokens != null ? new UserInfo(userInfoTokens.First(),
-                       userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : null);
+                       userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", ""));
         }
 
         public static AbsoluteUri With(this AbsoluteUri absoluteRequestUri, RelativeUri relativeRequestUri)
@@ -48,10 +48,11 @@ namespace Uris
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
         new(uri.Path, fieldName.ToQueryParameter(value).ToQuery(), uri.Fragment);
 
-        public static AbsoluteUri WithQueryString(this AbsoluteUri uri, string fieldName, string value)
+        public static AbsoluteUri WithQueryParameters(this AbsoluteUri uri, string fieldName, string value)
         =>
         uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        new(uri.Scheme, uri.Host, uri.Port, new RelativeUri().WithQueryString(fieldName, value));
+        new(uri.Scheme, uri.Host, uri.Port,
+            uri.RequestUri with { QueryParameters = uri.RequestUri.QueryParameters.Add(new QueryParameter(fieldName, value)) });
 
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
@@ -73,5 +74,14 @@ namespace Uris
                 ).ToImmutableList()
             };
 
+        public static AbsoluteUri WithCredentials(this AbsoluteUri uri, string username, string password)
+        =>
+        uri == null ? throw new ArgumentNullException(nameof(uri)) :
+        uri with { UserInfo = uri.UserInfo with { Username = username, Password = password } };
+
+        public static AbsoluteUri WithFragment(this AbsoluteUri uri, string fragment)
+        =>
+        uri == null ? throw new ArgumentNullException(nameof(uri)) :
+        uri with { RequestUri = uri.RequestUri with { Fragment = fragment } };
     }
 }
