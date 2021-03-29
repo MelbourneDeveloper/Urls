@@ -32,12 +32,11 @@ namespace Uris.UnitTests
             var uriString = new AbsoluteUri(Scheme, Host, Port,
                 new RelativeUri(
                         ImmutableList.Create(PathPart1, PathPart2),
-                    new Query(
                         ImmutableList.Create(
                             new QueryParameter(FieldName1, FieldValue1),
                             new QueryParameter(FieldName2, FieldValue2)
                             )
-                    ), Fragment),
+                    , Fragment),
                     new UserInfo(Username, Password)).ToString();
 
             var expected = $"{Scheme}://{Username}:{Password}@{Host}:{Port}/{PathPart1}/{PathPart2}?" +
@@ -55,12 +54,11 @@ namespace Uris.UnitTests
 
             var relativeRequestUri = new RelativeUri(
                                     ImmutableList.Create(PathPart1, PathPart2),
-                                new Query(
                                     ImmutableList.Create(
                                         new QueryParameter(FieldName1, FieldValue1),
                                         new QueryParameter(FieldName2, FieldValue2)
                                         )
-                                ));
+                                );
 
             absolute = absolute.With(relativeRequestUri);
 
@@ -74,12 +72,11 @@ namespace Uris.UnitTests
         {
             var relativeRequestUri = new RelativeUri(
                                     ImmutableList.Create(PathPart1, PathPart2),
-                                new Query(
                                     ImmutableList.Create(
                                         new QueryParameter(FieldName1, FieldValue1),
                                         new QueryParameter(FieldName2, FieldValue2)
                                         )
-                                ));
+                                );
 
             const string frag = "test";
 
@@ -97,12 +94,12 @@ namespace Uris.UnitTests
 
             Assert.AreEqual(
             FieldName1,
-            relativeRequestUri.Query?.Elements.First().FieldName
+            relativeRequestUri.Query?.First().FieldName
             );
 
             Assert.AreEqual(
             FieldValue1,
-            relativeRequestUri.Query?.Elements.First().Value
+            relativeRequestUri.Query?.First().Value
             );
         }
 
@@ -115,12 +112,12 @@ namespace Uris.UnitTests
 
             Assert.AreEqual(
             FieldName1,
-            absoluteRequestUri?.RequestUri?.Query?.Elements.First().FieldName
+            absoluteRequestUri?.RequestUri?.Query?.First().FieldName
             );
 
             Assert.AreEqual(
             FieldValue1,
-            absoluteRequestUri?.RequestUri?.Query?.Elements.First().Value
+            absoluteRequestUri?.RequestUri?.Query?.First().Value
             );
         }
 
@@ -135,12 +132,11 @@ namespace Uris.UnitTests
                 new RelativeUri(
                         ImmutableList.Create(PathPart1, PathPart2)
                         ,
-                    new Query(
                         ImmutableList.Create(
                             new QueryParameter(FieldName1, FieldValue1),
                             new QueryParameter(FieldName2, FieldValue2)
                             )
-                    ), Fragment),
+                    , Fragment),
                     new UserInfo(Username, Password)).ToString();
 
             var uri = new Uri(uriString, UriKind.Absolute);
@@ -156,12 +152,11 @@ namespace Uris.UnitTests
             var uriString = new AbsoluteUri(Scheme, Host, Port,
                 new RelativeUri(
                         ImmutableList.Create(PathPart1, PathPart2),
-                    new Query(
                         ImmutableList.Create(
                             new QueryParameter(FieldName1, FieldValue1),
                             new QueryParameter(FieldName2, FieldValue2)
                             )
-                    ), Fragment),
+                    , Fragment),
                     new UserInfo(Username, Password)).ToString();
 
             var uri = new Uri(uriString, UriKind.Absolute).ToAbsoluteRequestUri();
@@ -169,10 +164,10 @@ namespace Uris.UnitTests
             Assert.IsNotNull(uri);
             Assert.AreEqual(uri.Scheme, Scheme);
             Assert.AreEqual(uri.RequestUri.Fragment, Fragment);
-            Assert.AreEqual(uri.RequestUri.Query.Elements.First().FieldName, FieldName1);
-            Assert.AreEqual(uri.RequestUri.Query.Elements.First().Value, FieldValueEncoded1);
-            Assert.AreEqual(uri.RequestUri.Query.Elements[1].FieldName, FieldName2);
-            Assert.AreEqual(uri.RequestUri.Query.Elements[1].Value, FieldValueEncoded2);
+            Assert.AreEqual(uri.RequestUri.Query.First().FieldName, FieldName1);
+            Assert.AreEqual(uri.RequestUri.Query.First().Value, FieldValueEncoded1);
+            Assert.AreEqual(uri.RequestUri.Query[1].FieldName, FieldName2);
+            Assert.AreEqual(uri.RequestUri.Query[1].Value, FieldValueEncoded2);
             Assert.AreEqual(Host, uri.Host);
             Assert.AreEqual(Port, uri.Port);
             Assert.AreEqual(PathPart1, uri.RequestUri.Path[0]);

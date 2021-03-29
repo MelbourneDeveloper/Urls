@@ -24,8 +24,8 @@ namespace Uris
                                 StringSplitOptions.RemoveEmptyEntries))
                         ,
                         queryParametersList.Count == 0
-                            ? Query.Empty
-                            : new Query(ImmutableList.Create(queryParametersList.ToArray())),
+                            ? ImmutableList<QueryParameter>.Empty
+                            : queryParametersList.ToImmutableList(),
                         uri.Fragment.Substring(1)
                     ),
                     new UserInfo(userInfoTokens.First(),
@@ -41,7 +41,7 @@ namespace Uris
                 new RelativeUri(
                         ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                         ,
-                    queryParametersList.Count == 0 ? Query.Empty : new Query(ImmutableList.Create(queryParametersList.ToArray())),
+                    queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
                     uri.Fragment.Substring(1)
                     ),
                    new UserInfo(userInfoTokens.First(),
@@ -70,6 +70,6 @@ namespace Uris
 
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
-        public static Query ToQuery(this QueryParameter queryParameter) => new(Elements: ImmutableList.Create(queryParameter));
+        public static ImmutableList<QueryParameter> ToQuery(this QueryParameter queryParameter) => ImmutableList.Create(queryParameter);
     }
 }
