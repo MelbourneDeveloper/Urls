@@ -28,7 +28,7 @@ namespace Uris
         public override string ToString()
         =>
         (Path.Count > 0 ? $"/{string.Join("/", Path)}" : "") +
-        (QueryParameters.Count > 0 ? $"?{string.Join("&", QueryParameters.Select(e => $"{e.FieldName}={WebUtility.UrlEncode(e.Value)}"))}" : "") +
+        (QueryParameters.Count > 0 ? $"?{string.Join("&", QueryParameters.Select(e => e.ToString()))}" : "") +
         (!string.IsNullOrEmpty(Fragment) ? $"#{Fragment}" : "");
     }
 }
