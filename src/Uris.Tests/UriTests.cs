@@ -57,11 +57,11 @@ namespace Uris.UnitTests
         {
             var uri =
                 new AbsoluteUri(Scheme, Host, Port)
-                .WithQueryParameters(FieldName1, FieldValue1)
-                .WithCredentials(Username, Password)
-                .WithQueryParameters(FieldName2, FieldValue2)
-                .WithFragment(Fragment)
-                .WithPath(PathPart1, PathPart2);
+                .AddQueryParameter(FieldName1, FieldValue1)
+                .Credentials(Username, Password)
+                .AddQueryParameter(FieldName2, FieldValue2)
+                .Fragment(Fragment)
+                .Path(PathPart1, PathPart2);
 
             Assert.AreEqual(
                 expected,
@@ -73,11 +73,11 @@ namespace Uris.UnitTests
         {
             var uri =
                 Host.ToHttpUriFromHost(Port)
-                .WithQueryParameters(FieldName1, FieldValue1)
-                .WithCredentials(Username, Password)
-                .WithQueryParameters(FieldName2, FieldValue2)
-                .WithFragment(Fragment)
-                .WithPath(PathPart1, PathPart2);
+                .AddQueryParameter(FieldName1, FieldValue1)
+                .Credentials(Username, Password)
+                .AddQueryParameter(FieldName2, FieldValue2)
+                .Fragment(Fragment)
+                .Path(PathPart1, PathPart2);
 
             Assert.AreEqual(
                 expected,
@@ -107,7 +107,7 @@ namespace Uris.UnitTests
                                         )
                                 );
 
-            absolute = absolute.With(relativeRelativeUri);
+            absolute = absolute.RelativeUri(relativeRelativeUri);
 
             Assert.AreEqual(
                 relativeRelativeUri.Fragment,
@@ -127,7 +127,7 @@ namespace Uris.UnitTests
 
             const string frag = "test";
 
-            relativeRelativeUri = relativeRelativeUri.WithFragment(frag);
+            relativeRelativeUri = relativeRelativeUri.Fragment(frag);
 
             Assert.AreEqual(
                 frag,
@@ -137,7 +137,7 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestWithQueryStringStrings()
         {
-            var relativeRelativeUri = RelativeUri.Empty.WithQueryString(FieldName1, FieldValue1);
+            var relativeRelativeUri = RelativeUri.Empty.AddQueryString(FieldName1, FieldValue1);
 
             Assert.AreEqual(
             FieldName1,
@@ -155,7 +155,7 @@ namespace Uris.UnitTests
         {
             var absoluteRelativeUri = new AbsoluteUri("https", "test.com");
 
-            absoluteRelativeUri = absoluteRelativeUri.WithQueryParameters(FieldName1, FieldValue1);
+            absoluteRelativeUri = absoluteRelativeUri.AddQueryParameter(FieldName1, FieldValue1);
 
             Assert.AreEqual(
             FieldName1,
@@ -202,7 +202,7 @@ namespace Uris.UnitTests
                 message = "This is a sentence"
             };
 
-            var relativeUri = RelativeUri.Empty.WithQueryParamers(item);
+            var relativeUri = RelativeUri.Empty.QueryParamers(item);
 
             Assert.AreEqual(item.somelongstring, relativeUri.QueryParameters[0].Value);
             Assert.AreEqual(nameof(item.somelongstring), relativeUri.QueryParameters[0].FieldName);
