@@ -101,5 +101,8 @@ namespace Uris
         host == null ? throw new ArgumentNullException(nameof(host)) :
                 new AbsoluteUri("https", host, port);
 
+        public static AbsoluteUri ToAbsoluteUri(this string uriString)
+        => new Uri(uriString, UriKind.Absolute).ToAbsoluteUri();
+
     }
 }
