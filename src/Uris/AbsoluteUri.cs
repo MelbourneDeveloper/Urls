@@ -21,8 +21,7 @@
 
         public override string ToString()
         =>
-        $"{Scheme}://" +
-        $"{(!string.IsNullOrEmpty(UserInfo.Username) ? $"{UserInfo.Username}:{UserInfo.Password}@" : "")}" +
+        $"{Scheme}://" + UserInfo +
         $"{Host}" +
         (Port.HasValue ? $":{Port.Value}" : "") +
         RelativeUri;
