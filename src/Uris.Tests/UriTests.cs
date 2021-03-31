@@ -58,10 +58,10 @@ namespace Uris.UnitTests
             var uri =
                 new AbsoluteUri(Scheme, Host, Port)
                 .AddQueryParameter(FieldName1, FieldValue1)
-                .Credentials(Username, Password)
+                .WithCredentials(Username, Password)
                 .AddQueryParameter(FieldName2, FieldValue2)
-                .Fragment(Fragment)
-                .Path(PathPart1, PathPart2);
+                .WithFragment(Fragment)
+                .WithPath(PathPart1, PathPart2);
 
             Assert.AreEqual(
                 expected,
@@ -74,10 +74,10 @@ namespace Uris.UnitTests
             var uri =
                 Host.ToHttpUriFromHost(Port)
                 .AddQueryParameter(FieldName1, FieldValue1)
-                .Credentials(Username, Password)
+                .WithCredentials(Username, Password)
                 .AddQueryParameter(FieldName2, FieldValue2)
-                .Fragment(Fragment)
-                .Path(PathPart1, PathPart2);
+                .WithFragment(Fragment)
+                .WithPath(PathPart1, PathPart2);
 
             Assert.AreEqual(
                 expected,
@@ -107,7 +107,7 @@ namespace Uris.UnitTests
                                         )
                                 );
 
-            absolute = absolute.RelativeUri(relativeRelativeUri);
+            absolute = absolute.WithRelativeUri(relativeRelativeUri);
 
             Assert.AreEqual(
                 relativeRelativeUri.Fragment,
@@ -127,7 +127,7 @@ namespace Uris.UnitTests
 
             const string frag = "test";
 
-            relativeRelativeUri = relativeRelativeUri.Fragment(frag);
+            relativeRelativeUri = relativeRelativeUri.WithFragment(frag);
 
             Assert.AreEqual(
                 frag,
@@ -202,7 +202,7 @@ namespace Uris.UnitTests
                 message = "This is a sentence"
             };
 
-            var relativeUri = RelativeUri.Empty.QueryParamers(item);
+            var relativeUri = RelativeUri.Empty.WithQueryParamers(item);
 
             Assert.AreEqual(item.somelongstring, relativeUri.QueryParameters[0].Value);
             Assert.AreEqual(nameof(item.somelongstring), relativeUri.QueryParameters[0].FieldName);
