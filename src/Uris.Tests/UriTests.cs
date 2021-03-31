@@ -34,6 +34,14 @@ namespace Uris.UnitTests
 
 
         [TestMethod]
+        public void TestEquality()
+        {
+            var absoluteUri = expected.ToAbsoluteUri();
+            var uri = absoluteUri.ToUri();
+            Assert.AreEqual(uri, absoluteUri);
+        }
+
+        [TestMethod]
         public void Test()
         {
             var uriString = new AbsoluteUri(Scheme, Host, Port,

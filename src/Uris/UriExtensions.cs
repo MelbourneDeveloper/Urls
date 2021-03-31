@@ -9,6 +9,10 @@ namespace Uris
 {
     public static class UriExtensions
     {
+        public static Uri ToUri(this AbsoluteUri uri) =>
+    uri == null ? throw new ArgumentNullException(nameof(uri)) :
+    new Uri(uri.ToString());
+
         public static AbsoluteUri ToAbsoluteUri(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
