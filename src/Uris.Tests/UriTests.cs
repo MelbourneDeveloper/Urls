@@ -36,9 +36,16 @@ namespace Uris.UnitTests
         [TestMethod]
         public void TestEquality()
         {
-            var absoluteUri = expected.ToAbsoluteUri();
-            var uri = absoluteUri.ToUri();
-            Assert.AreEqual(uri, absoluteUri);
+            var absoluteUri1 = expected.ToAbsoluteUri();
+            Uri uri = absoluteUri1;
+            var absoluteUri2 = (AbsoluteUri)uri;
+
+            Assert.AreEqual(uri, absoluteUri1);
+            Assert.AreEqual(uri.ToString(), absoluteUri2.ToString());
+            Assert.AreEqual(absoluteUri1.ToString(), uri.ToString());
+            Assert.AreEqual(absoluteUri1, absoluteUri2);
+            Assert.AreEqual(absoluteUri2, uri);
+            Assert.AreEqual(absoluteUri2, absoluteUri1);
         }
 
         [TestMethod]
