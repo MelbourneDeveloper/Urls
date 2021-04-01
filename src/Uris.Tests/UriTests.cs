@@ -258,7 +258,28 @@ namespace Uris.UnitTests
             Assert.AreEqual(Password, uri.UserInfo?.Password);
         }
 
+
+        [TestMethod]
+        public void TestRelativeUriConstructors()
+        {
+            var relativeUri = new RelativeUri("a/a");
+            Assert.IsTrue(relativeUri.Path.SequenceEqual(new string[] { "a", "a" }));
+
+            relativeUri = new RelativeUri("a/");
+            Assert.IsTrue(relativeUri.Path.SequenceEqual(new string[] { "a" }));
+
+            relativeUri = new RelativeUri("a/b/c");
+            Assert.IsTrue(relativeUri.Path.SequenceEqual(new string[] { "a", "b", "c" }));
+
+            relativeUri = new RelativeUri("a/b/c/");
+            Assert.IsTrue(relativeUri.Path.SequenceEqual(new string[] { "a", "b", "c" }));
+
+            relativeUri = new RelativeUri("");
+            Assert.IsTrue(relativeUri.Path.SequenceEqual(new string[] { }));
+        }
+
     }
-
-
 }
+
+
+

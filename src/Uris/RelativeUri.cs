@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
@@ -18,6 +19,14 @@ namespace Uris
         IReadOnlyList<string>? path = null,
         IReadOnlyList<QueryParameter>? query = null,
         string? fragment = null) : this(path != null ? path.ToImmutableList() :
+        ImmutableList<string>.Empty, query?.ToImmutableList() ?? ImmutableList<QueryParameter>.Empty, fragment ?? "")
+        {
+        }
+
+        public RelativeUri(
+        string? path = null,
+        IReadOnlyList<QueryParameter>? query = null,
+        string? fragment = null) : this(path != null ? path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToImmutableList() :
         ImmutableList<string>.Empty, query?.ToImmutableList() ?? ImmutableList<QueryParameter>.Empty, fragment ?? "")
         {
         }
