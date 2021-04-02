@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uris", "Uris\Uris.csproj", "{225707BA-9780-4E54-83F0-E9A97715472C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urls", "Uris\Urls.csproj", "{225707BA-9780-4E54-83F0-E9A97715472C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3260000C-FEA0-48DC-87DF-3AE3293D7394}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uris.Tests", "Uris.Tests\Uris.Tests.csproj", "{68BF6DAF-015F-4B6E-8C7A-EADDC7476BF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urls.Tests", "Uris.Tests\Urls.Tests.csproj", "{68BF6DAF-015F-4B6E-8C7A-EADDC7476BF6}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Uris.TestsFSharp", "Uris.TestsFSharp\Uris.TestsFSharp.fsproj", "{C16A5161-F7BE-4676-BF66-0D33AD6A071F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Urls.TestsFSharp", "Uris.TestsFSharp\Urls.TestsFSharp.fsproj", "{C16A5161-F7BE-4676-BF66-0D33AD6A071F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Uris\Uris.csproj" />
+    <ProjectReference Include="..\Uris\Urls.csproj" />
   </ItemGroup>
 
 </Project>

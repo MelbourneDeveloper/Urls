@@ -5,15 +5,15 @@ using System.Linq;
 
 #pragma warning disable IDE0057 // Use range operator
 
-namespace Uris
+namespace Urls
 {
-    public static class UriExtensions
+    public static class UrlExtensions
     {
-        public static Uri ToUri(this AbsoluteUri uri) =>
-    uri == null ? throw new ArgumentNullException(nameof(uri)) :
-    new Uri(uri.ToString());
+        public static Uri ToUri(this AbsoluteUrl url) =>
+            url == null ? throw new ArgumentNullException(nameof(url)) :
+            new Uri(url.ToString());
 
-        public static AbsoluteUri ToAbsoluteUri(this Uri uri)
+        public static AbsoluteUrl ToAbsoluteUrl(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
 
@@ -26,8 +26,8 @@ namespace Uris
             queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
 
-            return new AbsoluteUri(uri.Scheme, uri.Host, uri.Port,
-                new RelativeUri(
+            return new AbsoluteUrl(uri.Scheme, uri.Host, uri.Port,
+                new RelativeUrl(
                         ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                         ,
                     queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
@@ -37,35 +37,34 @@ namespace Uris
                        userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", ""));
         }
 
-        public static AbsoluteUri WithRelativeUri(this AbsoluteUri absoluteRequestUri, RelativeUri relativeRequestUri)
+        public static AbsoluteUrl WithRelativeUrl(this AbsoluteUrl absoluteUrl, RelativeUrl relativeUrl)
         =>
-        absoluteRequestUri == null ? throw new ArgumentNullException(nameof(absoluteRequestUri)) :
-        new AbsoluteUri(absoluteRequestUri.Scheme, absoluteRequestUri.Host, absoluteRequestUri.Port, relativeRequestUri, absoluteRequestUri.UserInfo);
+        absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+        new AbsoluteUrl(absoluteUrl.Scheme, absoluteUrl.Host, absoluteUrl.Port, relativeUrl, absoluteUrl.UserInfo);
 
-        public static RelativeUri WithFragment(this RelativeUri uri, string fragment)
+        public static RelativeUrl WithFragment(this RelativeUrl relativeUrl, string fragment)
         =>
-        uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        new(uri.Path, uri.QueryParameters, fragment);
+        relativeUrl == null ? throw new ArgumentNullException(nameof(relativeUrl)) :
+        new(relativeUrl.Path, relativeUrl.QueryParameters, fragment);
 
-        public static RelativeUri AddQueryString(this RelativeUri uri, string fieldName, string value)
+        public static RelativeUrl AddQueryString(this RelativeUrl relativeUrl, string fieldName, string value)
         =>
-        uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        uri with { QueryParameters = uri.QueryParameters.Add(new QueryParameter(fieldName, value)) };
+        relativeUrl == null ? throw new ArgumentNullException(nameof(relativeUrl)) :
+        relativeUrl with { QueryParameters = relativeUrl.QueryParameters.Add(new QueryParameter(fieldName, value)) };
 
-        public static AbsoluteUri AddQueryParameter(this AbsoluteUri uri, string fieldName, string value)
+        public static AbsoluteUrl AddQueryParameter(this AbsoluteUrl absoluteUrl, string fieldName, string value)
         =>
-        uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        uri with { RelativeUri = uri.RelativeUri with { QueryParameters = uri.RelativeUri.QueryParameters.Add(new QueryParameter(fieldName, value)) } };
+        absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+        absoluteUrl with { RelativeUrl = absoluteUrl.RelativeUrl with { QueryParameters = absoluteUrl.RelativeUrl.QueryParameters.Add(new QueryParameter(fieldName, value)) } };
 
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
         public static ImmutableList<QueryParameter> ToQuery(this QueryParameter queryParameter) => ImmutableList.Create(queryParameter);
 
-
-        public static RelativeUri WithQueryParamers<T>(this RelativeUri relativeUri, T item)
+        public static RelativeUrl WithQueryParamers<T>(this RelativeUrl relativeUrl, T item)
         =>
-        relativeUri == null ? throw new ArgumentNullException(nameof(relativeUri)) :
-            relativeUri with
+        relativeUrl == null ? throw new ArgumentNullException(nameof(relativeUrl)) :
+            relativeUrl with
             {
                 QueryParameters =
                 typeof(T)
@@ -77,36 +76,36 @@ namespace Uris
                 ).ToImmutableList()
             };
 
-        public static AbsoluteUri WithCredentials(this AbsoluteUri uri, string username, string password)
+        public static AbsoluteUrl WithCredentials(this AbsoluteUrl absoluteUrl, string username, string password)
         =>
-        uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        uri with { UserInfo = new(username, password) };
+        absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+        absoluteUrl with { UserInfo = new(username, password) };
 
-        public static AbsoluteUri WithFragment(this AbsoluteUri uri, string fragment)
+        public static AbsoluteUrl WithFragment(this AbsoluteUrl absoluteUrl, string fragment)
         =>
-        uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        uri with { RelativeUri = uri.RelativeUri with { Fragment = fragment } };
+        absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+        absoluteUrl with { RelativeUrl = absoluteUrl.RelativeUrl with { Fragment = fragment } };
 
-        public static AbsoluteUri WithPath(this AbsoluteUri uri, IReadOnlyList<string> pathSegments)
+        public static AbsoluteUrl WithPath(this AbsoluteUrl absoluteUrl, IReadOnlyList<string> pathSegments)
         =>
-        uri == null ? throw new ArgumentNullException(nameof(uri)) :
-        uri with { RelativeUri = uri.RelativeUri with { Path = pathSegments.ToImmutableList() } };
+        absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+        absoluteUrl with { RelativeUrl = absoluteUrl.RelativeUrl with { Path = pathSegments.ToImmutableList() } };
 
-        public static AbsoluteUri WithPath(this AbsoluteUri uri, params string[] pathSegments)
-        => WithPath(uri, pathSegments.ToList());
+        public static AbsoluteUrl WithPath(this AbsoluteUrl absoluteUrl, params string[] pathSegments)
+        => WithPath(absoluteUrl, pathSegments.ToList());
 
-        public static AbsoluteUri ToHttpUriFromHost(this string host, int? port = null)
-        =>
-        host == null ? throw new ArgumentNullException(nameof(host)) :
-                new AbsoluteUri("http", host, port);
-
-        public static AbsoluteUri ToHttpsUriFromHost(this string host, int? port = null)
+        public static AbsoluteUrl ToHttpUriFromHost(this string host, int? port = null)
         =>
         host == null ? throw new ArgumentNullException(nameof(host)) :
-                new AbsoluteUri("https", host, port);
+                new AbsoluteUrl("http", host, port);
 
-        public static AbsoluteUri ToAbsoluteUri(this string uriString)
-        => new Uri(uriString, UriKind.Absolute).ToAbsoluteUri();
+        public static AbsoluteUrl ToHttpsUriFromHost(this string host, int? port = null)
+        =>
+        host == null ? throw new ArgumentNullException(nameof(host)) :
+                new AbsoluteUrl("https", host, port);
+
+        public static AbsoluteUrl ToAbsoluteUrl(this string urlString)
+        => new Uri(urlString, UriKind.Absolute).ToAbsoluteUrl();
 
     }
 }

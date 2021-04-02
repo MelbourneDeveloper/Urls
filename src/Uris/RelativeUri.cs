@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Uris
+namespace Urls
 {
     /// <summary>
-    /// Represents a Uri without the Host, Scheme, Port or UserInfo 
+    /// Represents a Url without the Host, Scheme, Port or UserInfo 
     /// </summary>
-    public record RelativeUri
+    public record RelativeUrl
+
     (
          ImmutableList<string> Path,
          ImmutableList<QueryParameter> QueryParameters,
          string Fragment
     )
     {
-        public RelativeUri(
+        public RelativeUrl(
         IReadOnlyList<string>? path = null,
         IReadOnlyList<QueryParameter>? query = null,
         string? fragment = null) : this(path != null ? path.ToImmutableList() :
@@ -23,7 +24,7 @@ namespace Uris
         {
         }
 
-        public RelativeUri(
+        public RelativeUrl(
         string? path = null,
         IReadOnlyList<QueryParameter>? query = null,
         string? fragment = null) : this(path != null ? path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToImmutableList() :
@@ -31,15 +32,15 @@ namespace Uris
         {
         }
 
-        public RelativeUri(RelativeUri relativeUri)
+        public RelativeUrl(RelativeUrl relativeUrl)
         {
-            if (relativeUri == null) throw new ArgumentNullException(nameof(relativeUri));
-            Path = relativeUri.Path;
-            QueryParameters = relativeUri.QueryParameters;
-            Fragment = relativeUri.Fragment;
+            if (relativeUrl == null) throw new ArgumentNullException(nameof(relativeUrl));
+            Path = relativeUrl.Path;
+            QueryParameters = relativeUrl.QueryParameters;
+            Fragment = relativeUrl.Fragment;
         }
 
-        public static RelativeUri Empty { get; } = new(ImmutableList<string>.Empty, ImmutableList<QueryParameter>.Empty);
+        public static RelativeUrl Empty { get; } = new(ImmutableList<string>.Empty, ImmutableList<QueryParameter>.Empty);
 
         public override string ToString()
         =>

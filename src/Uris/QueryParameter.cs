@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Uris
+namespace Urls
 {
     public record QueryParameter
     (
