@@ -31,6 +31,14 @@ namespace Uris
         {
         }
 
+        public RelativeUri(RelativeUri relativeUri)
+        {
+            if (relativeUri == null) throw new ArgumentNullException(nameof(relativeUri));
+            Path = relativeUri.Path;
+            QueryParameters = relativeUri.QueryParameters;
+            Fragment = relativeUri.Fragment;
+        }
+
         public static RelativeUri Empty { get; } = new(ImmutableList<string>.Empty, ImmutableList<QueryParameter>.Empty);
 
         public override string ToString()

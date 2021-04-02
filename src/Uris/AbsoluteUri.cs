@@ -25,6 +25,22 @@ namespace Uris
 
         }
 
+        public AbsoluteUri(AbsoluteUri absoluteUri)
+        {
+            if (absoluteUri == null) throw new ArgumentNullException(nameof(absoluteUri));
+            Scheme = absoluteUri.Scheme;
+            Host = absoluteUri.Host;
+            Port = absoluteUri.Port;
+            RelativeUri = new RelativeUri(absoluteUri.RelativeUri);
+            UserInfo = absoluteUri.UserInfo;
+        }
+
+#pragma warning disable CA1054 // URI-like parameters should not be strings
+        public AbsoluteUri(string uriString) : this(new Uri(uriString).ToAbsoluteUri())
+#pragma warning restore CA1054 // URI-like parameters should not be strings
+        {
+        }
+
         public override string ToString()
         =>
         $"{Scheme}://" + UserInfo +

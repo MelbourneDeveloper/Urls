@@ -1,4 +1,6 @@
-﻿namespace Uris
+﻿using System;
+
+namespace Uris
 {
     public record UserInfo
     (
@@ -6,6 +8,14 @@
         string Password
     )
     {
+        public UserInfo(UserInfo userInfo)
+        {
+            if (userInfo == null) throw new ArgumentNullException(nameof(userInfo));
+
+            Username = userInfo.Username;
+            Password = userInfo.Password;
+        }
+
         public override string ToString()
             => $"{(!string.IsNullOrEmpty(Username) ? $"{Username}:{Password}@" : "")}";
     }
