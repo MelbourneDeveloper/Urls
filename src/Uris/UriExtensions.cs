@@ -30,15 +30,21 @@ namespace Urls
             queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
 
-            return new AbsoluteUrl(uri.Scheme, uri.Host, uri.Port,
+            var fragment = uri.Fragment != null && uri.Fragment.Length >= 1 ? uri.Fragment.Substring(1) : "";
+
+            var userInfo = userInfoTokens != null && userInfoTokens.Length > 0 ? new UserInfo(userInfoTokens.First(),
+                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", "");
+
+            return new AbsoluteUrl(
+                uri.Scheme,
+                uri.Host,
+                uri.Port,
                 new RelativeUrl(
-                        ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
-                        ,
+                    ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)),
                     queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
-                    uri.Fragment.Substring(1)
+                    fragment
                     ),
-                   userInfoTokens != null ? new UserInfo(userInfoTokens.First(),
-                       userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", ""));
+                   userInfo);
         }
 
         public static AbsoluteUrl WithRelativeUrl(this AbsoluteUrl absoluteUrl, RelativeUrl relativeUrl)

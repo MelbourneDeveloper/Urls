@@ -284,8 +284,18 @@ namespace Urls.UnitTests
         public void TestToAbsoluteUrlThings()
         {
             var absoluteUrl = new AbsoluteUrl($"{Scheme}://{Host}");
+
             Assert.AreEqual(Scheme, absoluteUrl.Scheme);
             Assert.AreEqual(Host, absoluteUrl.Host);
+
+            absoluteUrl = new AbsoluteUrl($"{Scheme}://{Host}:{Port}");
+            Assert.AreEqual(Port, absoluteUrl.Port);
+
+            absoluteUrl = new AbsoluteUrl("http://www.hotmail.com");
+            Assert.AreEqual("www.hotmail.com", absoluteUrl.Host);
+
+            absoluteUrl = new AbsoluteUrl("http://bob:@www.hotmail.com");
+            Assert.AreEqual("bob", absoluteUrl.UserInfo.Username);
         }
     }
 }
