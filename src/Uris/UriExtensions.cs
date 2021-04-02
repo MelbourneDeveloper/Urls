@@ -21,7 +21,11 @@ namespace Urls
 
             var queryParametersList = new List<QueryParameter>();
 
-            var queryParameterTokens = (uri.Query ?? "").Substring(1).Split(new char[] { '&' });
+            var queryParameterTokens = new string[0];
+            if (uri.Query != null && uri.Query.Length >= 1)
+            {
+                queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
+            }
 
             queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));

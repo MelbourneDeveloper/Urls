@@ -278,8 +278,16 @@ namespace Urls.UnitTests
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { }));
         }
 
+
+
+        [TestMethod]
+        public void TestToAbsoluteUrlThings()
+        {
+            var absoluteUrl = new AbsoluteUrl($"{Scheme}://{Host}");
+            Assert.AreEqual(Scheme, absoluteUrl.Scheme);
+            Assert.AreEqual(Host, absoluteUrl.Host);
+        }
     }
 }
-
 
 
