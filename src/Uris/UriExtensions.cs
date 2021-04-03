@@ -117,5 +117,15 @@ namespace Urls
         public static AbsoluteUrl ToAbsoluteUrl(this string urlString)
         => new Uri(urlString, UriKind.Absolute).ToAbsoluteUrl();
 
+        public static RelativeUrl AppendPath(this RelativeUrl relativeUrl, params string[] args)
+            =>
+            relativeUrl == null ? throw new ArgumentNullException(nameof(relativeUrl)) :
+            relativeUrl with { Path = relativeUrl.Path.AddRange(args) };
+
+        public static AbsoluteUrl AppendPath(this AbsoluteUrl absoluteUrl, params string[] args)
+            =>
+            absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+            absoluteUrl with { RelativeUrl = absoluteUrl.RelativeUrl.AppendPath(args) };
+
     }
 }

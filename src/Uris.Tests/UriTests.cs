@@ -316,6 +316,15 @@ namespace Urls.UnitTests
             var completeUri = baseUri.WithRelativeUrl(baseUri.RelativeUrl.AddQueryString("personKey", "abc"));
             Assert.AreEqual($"{urlString}?personKey=abc", completeUri.ToString());
         }
+
+        [TestMethod]
+        public void TestAppendPath()
+        {
+            const string urlString = "http://www.test.com:80/test";
+            var baseUri = new AbsoluteUrl(urlString);
+            var completeUri = baseUri.AppendPath("test");
+            Assert.AreEqual($"http://www.test.com:80/test/test", completeUri.ToString());
+        }
     }
 }
 
