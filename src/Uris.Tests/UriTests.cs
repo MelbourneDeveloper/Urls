@@ -297,18 +297,6 @@ namespace Urls.UnitTests
         }
 
         [TestMethod]
-        public void TestRelativeUriToRelativeUrl()
-        {
-            const string path = "error";
-
-            var relativeUrl = new Uri(path, UriKind.Relative)
-                .ToAbsoluteUrl()
-                .RelativeUrl;
-
-            Assert.AreEqual(path, relativeUrl.Path.First());
-        }
-
-        [TestMethod]
         public void TestWithRelative()
         {
             const string urlString = "https://localhost:44337/JsonPerson";
