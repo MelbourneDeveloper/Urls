@@ -313,7 +313,7 @@ namespace Urls.UnitTests
         {
             const string urlString = "https://localhost:44337/JsonPerson";
             var baseUri = new AbsoluteUrl(urlString);
-            var completeUri = baseUri.WithRelativeUrl(RelativeUrl.Empty.AddQueryString("personKey", "abc"));
+            var completeUri = baseUri.WithRelativeUrl(baseUri.RelativeUrl.AddQueryString("personKey", "abc"));
             Assert.AreEqual($"{urlString}?personKey=abc", completeUri.ToString());
         }
     }
