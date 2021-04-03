@@ -278,8 +278,6 @@ namespace Urls.UnitTests
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { }));
         }
 
-
-
         [TestMethod]
         public void TestToAbsoluteUrlThings()
         {
@@ -296,6 +294,27 @@ namespace Urls.UnitTests
 
             absoluteUrl = new AbsoluteUrl("http://bob:@www.hotmail.com");
             Assert.AreEqual("bob", absoluteUrl.UserInfo.Username);
+        }
+
+        [TestMethod]
+        public void TestRelativeUriToRelativeUrl()
+        {
+            const string path = "error";
+
+            var relativeUrl = new Uri(path, UriKind.Relative)
+                .ToAbsoluteUrl()
+                .RelativeUrl;
+
+            Assert.AreEqual(path, relativeUrl.Path.First());
+        }
+
+        [TestMethod]
+        public void TestWithRelative()
+        {
+            const string urlString = "https://localhost:44337/JsonPerson";
+            var baseUri = new AbsoluteUrl(urlString);
+            var completeUri = baseUri.WithRelativeUrl(RelativeUrl.Empty.AddQueryString("personKey", "abc"));
+            Assert.AreEqual($"{urlString}?personKey=abc", completeUri.ToString());
         }
     }
 }
