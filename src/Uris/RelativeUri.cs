@@ -32,6 +32,12 @@ namespace Urls
         {
         }
 
+#pragma warning disable CA1054 // URI-like parameters should not be strings
+        public RelativeUrl(string url) : this(new Uri(url, UriKind.Relative).ToAbsoluteUrl().RelativeUrl)
+#pragma warning restore CA1054 // URI-like parameters should not be strings
+        {
+        }
+
         public RelativeUrl(RelativeUrl relativeUrl)
         {
             if (relativeUrl == null) throw new ArgumentNullException(nameof(relativeUrl));
