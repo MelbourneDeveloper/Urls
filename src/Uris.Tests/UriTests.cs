@@ -47,6 +47,7 @@ namespace Urls.UnitTests
         {
             var absoluteUrl1 = expected.ToAbsoluteUrl();
             Uri uri = absoluteUrl1;
+            var uri2 = absoluteUrl1.ToUri();
             var absoluteUrl2 = (AbsoluteUrl)uri;
 
             Assert.AreEqual(uri, absoluteUrl1);
@@ -64,6 +65,8 @@ namespace Urls.UnitTests
             Assert.AreEqual(absoluteUrl1, absoluteUrl2);
             Assert.AreEqual(absoluteUrl2, uri);
             Assert.AreEqual(absoluteUrl2, absoluteUrl1);
+
+            Assert.AreEqual(uri, uri2);
         }
 
         [TestMethod]
