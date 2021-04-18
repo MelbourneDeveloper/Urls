@@ -331,6 +331,11 @@ namespace Urls.UnitTests
             var completeUri = baseUri.AppendPath("test");
             Assert.AreEqual($"http://www.test.com:80/test/test", completeUri.ToString());
         }
+
+
+
+        [TestMethod]
+        public void TestUserInfoStuff() => Assert.IsTrue((new UserInfo("a", "b") with { Username = "b" }).Equals(new UserInfo("b", "b")));
     }
 }
 
