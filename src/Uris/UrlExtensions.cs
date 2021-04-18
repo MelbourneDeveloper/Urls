@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 #pragma warning disable IDE0057 // Use range operator
+
+[assembly: InternalsVisibleTo("Urls.Tests")]
 
 namespace Urls
 {
     public static class UrlExtensions
     {
+        internal const string ErrorMessageMustBeAbsolute = "The Uri must be an absolute Uri even when converting to a RelativeUrl";
+
         public static Uri ToUri(this AbsoluteUrl url) =>
             url == null ? throw new ArgumentNullException(nameof(url)) :
             new Uri(url.ToString());
@@ -16,8 +21,29 @@ namespace Urls
         public static AbsoluteUrl ToAbsoluteUrl(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
+            if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
             var userInfoTokens = uri.UserInfo?.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var relativeUrl = ToRelativeUrl(uri);
+
+            var userInfo = userInfoTokens != null && userInfoTokens.Length > 0 ? new UserInfo(userInfoTokens.First(),
+                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", "");
+
+            return new AbsoluteUrl(
+                uri.Scheme,
+                uri.Host,
+                uri.Port,
+                relativeUrl,
+                   userInfo);
+        }
+
+        public static RelativeUrl ToRelativeUrl(this Uri uri)
+        {
+            if (uri == null) throw new ArgumentNullException(nameof(uri));
+            if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
+
+            var path = ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
 
             var queryParametersList = new List<QueryParameter>();
 
@@ -32,20 +58,57 @@ namespace Urls
 
             var fragment = uri.Fragment != null && uri.Fragment.Length >= 1 ? uri.Fragment.Substring(1) : "";
 
-            var userInfo = userInfoTokens != null && userInfoTokens.Length > 0 ? new UserInfo(userInfoTokens.First(),
-                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", "");
-
-            return new AbsoluteUrl(
-                uri.Scheme,
-                uri.Host,
-                uri.Port,
-                new RelativeUrl(
-                    ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)),
+            return new RelativeUrl(
+                    path,
                     queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
                     fragment
-                    ),
-                   userInfo);
+                    );
         }
+
+        //TODO: this looks mighty similar to the above. How to merge?
+
+        public static RelativeUrl ToRelativeUrl(this string relativeUrlString)
+        {
+            if (relativeUrlString == null) throw new ArgumentNullException(nameof(relativeUrlString));
+
+            if (string.IsNullOrEmpty(relativeUrlString)) return RelativeUrl.Empty;
+
+            var fragment = "";
+            var queryString = "";
+
+            var tokens = relativeUrlString.Split(new char[] { '#' }, StringSplitOptions.None);
+
+            if (tokens.Length > 1) fragment = tokens[1];
+
+            tokens = tokens[0].Split(new char[] { '?' }, StringSplitOptions.None);
+
+            if (tokens.Length > 1) queryString = tokens[1];
+
+            var pathString = tokens[0];
+
+            var path = ImmutableList.Create(
+                pathString.Split(new char[] { '/' }, StringSplitOptions.None)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToArray());
+
+            var queryParametersList = new List<QueryParameter>();
+
+            var queryParameterTokens = new string[0];
+            if (queryString.Length >= 1)
+            {
+                queryParameterTokens = queryString.Split(new char[] { '&' });
+            }
+
+            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
+                => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
+
+            return new RelativeUrl(
+                    path,
+                    queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
+                    fragment
+                    );
+        }
+
 
         public static AbsoluteUrl WithRelativeUrl(this AbsoluteUrl absoluteUrl, RelativeUrl relativeUrl)
         =>

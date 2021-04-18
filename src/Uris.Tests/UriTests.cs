@@ -279,24 +279,68 @@ namespace Urls.UnitTests
             Assert.AreEqual(Password, uri.UserInfo?.Password);
         }
 
+        [TestMethod]
+        public void TestRelativeToAbsoluteUrlThrowsException()
+            => Assert.AreEqual(UrlExtensions.ErrorMessageMustBeAbsolute, Assert.ThrowsException<InvalidOperationException>(()
+                => new Uri("", UriKind.Relative).ToAbsoluteUrl()).Message
+                );
+
+        [TestMethod]
+        public void TestRelativeToRelativeUrlThrowsException()
+        => Assert.AreEqual(UrlExtensions.ErrorMessageMustBeAbsolute, Assert.ThrowsException<InvalidOperationException>(()
+            => new Uri("", UriKind.Relative).ToRelativeUrl()).Message
+            );
 
         [TestMethod]
         public void TestRelativeUrlConstructors()
         {
-            var RelativeUrl = new RelativeUrl("a/a");
+            var RelativeUrl = "a/a".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "a" }));
 
-            RelativeUrl = new RelativeUrl("a/");
+            RelativeUrl = "a/".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a" }));
 
-            RelativeUrl = new RelativeUrl("a/b/c");
+            RelativeUrl = "a/b/c".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "b", "c" }));
 
-            RelativeUrl = new RelativeUrl("a/b/c/");
+            RelativeUrl = "a/b/c/".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "b", "c" }));
 
-            RelativeUrl = new RelativeUrl("");
+            RelativeUrl = "".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { }));
+
+            RelativeUrl = "?asd=1".ToRelativeUrl();
+            Assert.AreEqual("asd", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("1", RelativeUrl.QueryParameters[0].Value);
+
+            RelativeUrl = "a/a?a=1#a".ToRelativeUrl();
+            Assert.AreEqual("a", RelativeUrl.Path[0]);
+            Assert.AreEqual("a", RelativeUrl.Path[1]);
+            Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("1", RelativeUrl.QueryParameters[0].Value);
+            Assert.AreEqual("a", RelativeUrl.Fragment);
+
+            RelativeUrl = "a/a?a=<hi>#a".ToRelativeUrl();
+            Assert.AreEqual("a", RelativeUrl.Path[0]);
+            Assert.AreEqual("a", RelativeUrl.Path[1]);
+            Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("<hi>", RelativeUrl.QueryParameters[0].Value);
+            Assert.AreEqual("a", RelativeUrl.Fragment);
+
+            RelativeUrl = new RelativeUrl("a/a?a=<hi>#a");
+            Assert.AreEqual("a", RelativeUrl.Path[0]);
+            Assert.AreEqual("a", RelativeUrl.Path[1]);
+            Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("<hi>", RelativeUrl.QueryParameters[0].Value);
+            Assert.AreEqual("a", RelativeUrl.Fragment);
+
+            RelativeUrl = "a/a?a#a".ToRelativeUrl();
+            Assert.AreEqual("a", RelativeUrl.Path[0]);
+            Assert.AreEqual("a", RelativeUrl.Path[1]);
+            Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual(null, RelativeUrl.QueryParameters[0].Value);
+            Assert.AreEqual("a", RelativeUrl.Fragment);
+            Assert.AreEqual("/a/a?a#a", RelativeUrl.ToString());
         }
 
         [TestMethod]
@@ -327,6 +371,13 @@ namespace Urls.UnitTests
         }
 
         [TestMethod]
+        public void TestWithRelative2()
+        {
+            var relativeUrl = "/JsonPerson?personKey=123".ToRelativeUrl();
+            Assert.AreEqual("personKey", relativeUrl.QueryParameters.First().FieldName);
+        }
+
+        [TestMethod]
         public void TestAppendPath()
         {
             const string urlString = "http://www.test.com:80/test";
@@ -344,10 +395,16 @@ namespace Urls.UnitTests
         public void TestToAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
 
         [TestMethod]
+        public void TestToRelativeUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToRelativeUrl());
+
+        [TestMethod]
+        public void TestToRelativeUriNullGuard2() => Assert.ThrowsException<ArgumentNullException>(() => ((string)null).ToRelativeUrl());
+
+        [TestMethod]
         public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl(null));
+        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl((RelativeUrl)null));
 
         [TestMethod]
         public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));
