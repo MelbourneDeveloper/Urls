@@ -69,9 +69,7 @@ namespace Urls
 
         public static QueryParameter ToQueryParameter(this string fieldName, string value) => new(fieldName, value);
 
-        public static ImmutableList<QueryParameter> ToQuery(this QueryParameter queryParameter) => ImmutableList.Create(queryParameter);
-
-        public static RelativeUrl WithQueryParamers<T>(this RelativeUrl relativeUrl, T item)
+        public static RelativeUrl WithQueryParameters<T>(this RelativeUrl relativeUrl, T item)
         =>
         relativeUrl == null ? throw new ArgumentNullException(nameof(relativeUrl)) :
             relativeUrl with
