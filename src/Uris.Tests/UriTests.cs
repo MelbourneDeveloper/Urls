@@ -238,7 +238,7 @@ namespace Urls.UnitTests
                 message = "This is a sentence"
             };
 
-            var relativeUrl = RelativeUrl.Empty.WithQueryParamers(item);
+            var relativeUrl = RelativeUrl.Empty.WithQueryParameters(item);
 
             Assert.AreEqual(item.somelongstring, relativeUrl.QueryParameters[0].Value);
             Assert.AreEqual(nameof(item.somelongstring), relativeUrl.QueryParameters[0].FieldName);
@@ -339,6 +339,15 @@ namespace Urls.UnitTests
 
         [TestMethod]
         public void TestUserInfoStuff() => Assert.IsTrue((new UserInfo("a", "b") with { Username = "b" }).Equals(new UserInfo("b", "b")));
+
+        [TestMethod]
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        public void TestAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+
+
     }
 }
 
