@@ -313,6 +313,13 @@ namespace Urls.UnitTests
             Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
             Assert.AreEqual("1", RelativeUrl.QueryParameters[0].Value);
             Assert.AreEqual("a", RelativeUrl.Fragment);
+
+            RelativeUrl = "a/a?a=<hi>#a".ToRelativeUrl();
+            Assert.AreEqual("a", RelativeUrl.Path[0]);
+            Assert.AreEqual("a", RelativeUrl.Path[1]);
+            Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("<hi>", RelativeUrl.QueryParameters[0].Value);
+            Assert.AreEqual("a", RelativeUrl.Fragment);
         }
 
         [TestMethod]
