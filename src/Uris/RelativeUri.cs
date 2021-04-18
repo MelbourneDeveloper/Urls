@@ -47,6 +47,16 @@ namespace Urls
         (Path.Count > 0 ? $"/{string.Join("/", Path)}" : "") +
         (QueryParameters.Count > 0 ? $"?{string.Join("&", QueryParameters.Select(e => e.ToString()))}" : "") +
         (!string.IsNullOrEmpty(Fragment) ? $"#{Fragment}" : "");
+
+        public virtual bool Equals(RelativeUrl? other) =>
+            other != null &&
+            string.CompareOrdinal(other.Fragment, Fragment) == 0 &&
+            other.Path.SequenceEqual(Path) &&
+            other.QueryParameters.SequenceEqual(QueryParameters);
+
+        // Optional: warning generated if not supplied when Equals(R?) is user-defined.
+        public override int GetHashCode() => 1;
+
     }
 }
 

@@ -56,7 +56,7 @@ namespace Urls.UnitTests
 
             //Just here to get more granular
             Assert.AreEqual(absoluteUrl1.UserInfo, absoluteUrl2.UserInfo);
-            Assert.AreEqual(absoluteUrl1.RelativeUrl.QueryParameters, absoluteUrl2.RelativeUrl.QueryParameters);
+            Assert.IsTrue(absoluteUrl1.RelativeUrl.QueryParameters.SequenceEqual(absoluteUrl2.RelativeUrl.QueryParameters));
             Assert.AreEqual(absoluteUrl1.RelativeUrl, absoluteUrl2.RelativeUrl);
 
 
