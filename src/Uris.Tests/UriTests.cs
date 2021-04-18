@@ -334,7 +334,7 @@ namespace Urls.UnitTests
         [TestMethod]
         public void TestWithRelative2()
         {
-            var relativeUrl = new RelativeUrl("https://localhost:44337/JsonPerson?personKey=123");
+            var relativeUrl = new RelativeUrl("/JsonPerson?personKey=123");
             Assert.AreEqual("personKey", relativeUrl.QueryParameters.First().FieldName);
         }
 

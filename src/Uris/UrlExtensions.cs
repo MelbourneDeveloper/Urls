@@ -26,6 +26,25 @@ namespace Urls
 
             var userInfoTokens = uri.UserInfo?.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var relativeUrl = ToRelativeUrl(uri);
+
+            var userInfo = userInfoTokens != null && userInfoTokens.Length > 0 ? new UserInfo(userInfoTokens.First(),
+                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", "");
+
+            return new AbsoluteUrl(
+                uri.Scheme,
+                uri.Host,
+                uri.Port,
+                relativeUrl,
+                   userInfo);
+        }
+
+        public static RelativeUrl ToRelativeUrl(this Uri uri)
+        {
+            if (uri == null) throw new ArgumentNullException(nameof(uri));
+
+            var path = ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
+
             var queryParametersList = new List<QueryParameter>();
 
             var queryParameterTokens = new string[0];
@@ -39,19 +58,11 @@ namespace Urls
 
             var fragment = uri.Fragment != null && uri.Fragment.Length >= 1 ? uri.Fragment.Substring(1) : "";
 
-            var userInfo = userInfoTokens != null && userInfoTokens.Length > 0 ? new UserInfo(userInfoTokens.First(),
-                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", "");
-
-            return new AbsoluteUrl(
-                uri.Scheme,
-                uri.Host,
-                uri.Port,
-                new RelativeUrl(
-                    ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)),
+            return new RelativeUrl(
+                    path,
                     queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
                     fragment
-                    ),
-                   userInfo);
+                    );
         }
 
         public static AbsoluteUrl WithRelativeUrl(this AbsoluteUrl absoluteUrl, RelativeUrl relativeUrl)
