@@ -280,10 +280,16 @@ namespace Urls.UnitTests
         }
 
         [TestMethod]
-        public void TestRelativeToAbsolute()
+        public void TestRelativeToAbsoluteUrlThrowsException()
             => Assert.AreEqual(UrlExtensions.ErrorMessageMustBeAbsolute, Assert.ThrowsException<InvalidOperationException>(()
                 => new Uri("", UriKind.Relative).ToAbsoluteUrl()).Message
                 );
+
+        [TestMethod]
+        public void TestRelativeToRelativeUrlThrowsException()
+        => Assert.AreEqual(UrlExtensions.ErrorMessageMustBeAbsolute, Assert.ThrowsException<InvalidOperationException>(()
+            => new Uri("", UriKind.Relative).ToRelativeUrl()).Message
+            );
 
         [TestMethod]
         public void TestRelativeUrlConstructors()
@@ -387,6 +393,12 @@ namespace Urls.UnitTests
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [TestMethod]
         public void TestToAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
+
+        [TestMethod]
+        public void TestToRelativeUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToRelativeUrl());
+
+        [TestMethod]
+        public void TestToRelativeUriNullGuard2() => Assert.ThrowsException<ArgumentNullException>(() => ((string)null).ToRelativeUrl());
 
         [TestMethod]
         public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));

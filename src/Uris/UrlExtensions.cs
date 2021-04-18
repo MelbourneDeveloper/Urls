@@ -12,7 +12,7 @@ namespace Urls
 {
     public static class UrlExtensions
     {
-        internal const string ErrorMessageMustBeAbsolute = "The Uri must be an absolute Uri";
+        internal const string ErrorMessageMustBeAbsolute = "The Uri must be an absolute Uri even when converting to a RelativeUrl";
 
         public static Uri ToUri(this AbsoluteUrl url) =>
             url == null ? throw new ArgumentNullException(nameof(url)) :
@@ -21,7 +21,6 @@ namespace Urls
         public static AbsoluteUrl ToAbsoluteUrl(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
-
             if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
             var userInfoTokens = uri.UserInfo?.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -42,6 +41,7 @@ namespace Urls
         public static RelativeUrl ToRelativeUrl(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
+            if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
             var path = ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
 
