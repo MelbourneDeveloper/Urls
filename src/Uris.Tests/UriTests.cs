@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 
 #pragma warning disable CA1055 // Url-like return values should not be strings
 #pragma warning disable IDE0057 // Use range operator
@@ -34,18 +35,38 @@ namespace Urls.UnitTests
 
 
         [TestMethod]
+        public void TestQueryParameterEquality()
+        {
+            var qp1 = new QueryParameter("n", "v");
+            var qp2 = new QueryParameter("n", "v");
+            Assert.AreEqual(qp1, qp2);
+        }
+
+        [TestMethod]
         public void TestEquality()
         {
             var absoluteUrl1 = expected.ToAbsoluteUrl();
             Uri uri = absoluteUrl1;
+            var uri2 = absoluteUrl1.ToUri();
             var absoluteUrl2 = (AbsoluteUrl)uri;
 
             Assert.AreEqual(uri, absoluteUrl1);
-            Assert.AreEqual(uri.ToString(), absoluteUrl2.ToString());
-            Assert.AreEqual(absoluteUrl1.ToString(), uri.ToString());
+            Assert.AreEqual(uri.ToString(), WebUtility.UrlDecode(absoluteUrl2.ToString()));
+            Assert.AreEqual(WebUtility.UrlDecode(absoluteUrl1.ToString()), uri.ToString());
+            Assert.AreEqual(absoluteUrl1.ToString(), absoluteUrl2.ToString());
+
+            //Just here to get more granular
+            Assert.AreEqual(absoluteUrl1.UserInfo, absoluteUrl2.UserInfo);
+            Assert.IsTrue(absoluteUrl1.RelativeUrl.QueryParameters.SequenceEqual(absoluteUrl2.RelativeUrl.QueryParameters));
+            Assert.AreEqual(absoluteUrl1.RelativeUrl, absoluteUrl2.RelativeUrl);
+
+            Assert.AreEqual(absoluteUrl1.RelativeUrl.GetHashCode(), absoluteUrl2.RelativeUrl.GetHashCode());
+
             Assert.AreEqual(absoluteUrl1, absoluteUrl2);
             Assert.AreEqual(absoluteUrl2, uri);
             Assert.AreEqual(absoluteUrl2, absoluteUrl1);
+
+            Assert.AreEqual(uri, uri2);
         }
 
         [TestMethod]
@@ -217,7 +238,7 @@ namespace Urls.UnitTests
                 message = "This is a sentence"
             };
 
-            var relativeUrl = RelativeUrl.Empty.WithQueryParamers(item);
+            var relativeUrl = RelativeUrl.Empty.WithQueryParameters(item);
 
             Assert.AreEqual(item.somelongstring, relativeUrl.QueryParameters[0].Value);
             Assert.AreEqual(nameof(item.somelongstring), relativeUrl.QueryParameters[0].FieldName);
@@ -246,9 +267,9 @@ namespace Urls.UnitTests
             Assert.AreEqual(uri.Scheme, Scheme);
             Assert.AreEqual(uri.RelativeUrl.Fragment, Fragment);
             Assert.AreEqual(uri.RelativeUrl.QueryParameters.First().FieldName, FieldName1);
-            Assert.AreEqual(uri.RelativeUrl.QueryParameters.First().Value, FieldValueEncoded1);
+            Assert.AreEqual(uri.RelativeUrl.QueryParameters.First().Value, FieldValue1);
             Assert.AreEqual(uri.RelativeUrl.QueryParameters[1].FieldName, FieldName2);
-            Assert.AreEqual(uri.RelativeUrl.QueryParameters[1].Value, FieldValueEncoded2);
+            Assert.AreEqual(uri.RelativeUrl.QueryParameters[1].Value, FieldValue2);
             Assert.AreEqual(Host, uri.Host);
             Assert.AreEqual(Port, uri.Port);
             Assert.AreEqual(PathPart1, uri.RelativeUrl.Path[0]);
@@ -313,6 +334,32 @@ namespace Urls.UnitTests
             var completeUri = baseUri.AppendPath("test");
             Assert.AreEqual($"http://www.test.com:80/test/test", completeUri.ToString());
         }
+
+        [TestMethod]
+        public void TestUserInfoStuff() => Assert.IsTrue((new UserInfo("a", "b") with { Username = "b" }).Equals(new UserInfo("b", "b")));
+
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        [TestMethod]
+        public void TestToAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
+
+        [TestMethod]
+        public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
+
+        [TestMethod]
+        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl(null));
+
+        [TestMethod]
+        public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+
+        [TestMethod]
+        public void TestToQueryParameter() => "a".ToQueryParameter("b").Equals(new QueryParameter("a", "b"));
+
+        [TestMethod]
+        //TODO: Is this correct?
+        public void TestEmptyAbsoluteUrl() => Assert.AreEqual("://", AbsoluteUrl.Empty.ToString());
     }
 }
 
