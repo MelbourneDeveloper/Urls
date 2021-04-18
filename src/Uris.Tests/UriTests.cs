@@ -321,6 +321,13 @@ namespace Urls.UnitTests
             Assert.AreEqual("<hi>", RelativeUrl.QueryParameters[0].Value);
             Assert.AreEqual("a", RelativeUrl.Fragment);
 
+            RelativeUrl = new RelativeUrl("a/a?a=<hi>#a");
+            Assert.AreEqual("a", RelativeUrl.Path[0]);
+            Assert.AreEqual("a", RelativeUrl.Path[1]);
+            Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("<hi>", RelativeUrl.QueryParameters[0].Value);
+            Assert.AreEqual("a", RelativeUrl.Fragment);
+
             RelativeUrl = "a/a?a#a".ToRelativeUrl();
             Assert.AreEqual("a", RelativeUrl.Path[0]);
             Assert.AreEqual("a", RelativeUrl.Path[1]);
@@ -385,7 +392,7 @@ namespace Urls.UnitTests
         public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl(null));
+        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl((RelativeUrl)null));
 
         [TestMethod]
         public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));

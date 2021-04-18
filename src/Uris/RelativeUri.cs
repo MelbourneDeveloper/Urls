@@ -24,13 +24,12 @@ namespace Urls
         {
         }
 
-        //public RelativeUrl(
-        //string? path = null,
-        //IReadOnlyList<QueryParameter>? query = null,
-        //string? fragment = null) : this(path != null ? path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToImmutableList() :
-        //ImmutableList<string>.Empty, query?.ToImmutableList() ?? ImmutableList<QueryParameter>.Empty, fragment ?? "")
-        //{
-        //}
+        public RelativeUrl(
+#pragma warning disable CA1054 // URI-like parameters should not be strings
+        string relativeUrlString) : this(relativeUrlString.ToRelativeUrl())
+#pragma warning restore CA1054 // URI-like parameters should not be strings
+        {
+        }
 
         public RelativeUrl(RelativeUrl relativeUrl)
         {
