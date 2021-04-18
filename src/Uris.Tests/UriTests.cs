@@ -335,41 +335,31 @@ namespace Urls.UnitTests
             Assert.AreEqual($"http://www.test.com:80/test/test", completeUri.ToString());
         }
 
-
-
         [TestMethod]
         public void TestUserInfoStuff() => Assert.IsTrue((new UserInfo("a", "b") with { Username = "b" }).Equals(new UserInfo("b", "b")));
 
-        [TestMethod]
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public void TestAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-
+        [TestMethod]
+        public void TestToAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
 
         [TestMethod]
-        public void TestToQueryParameter() => "a".ToQueryParameter("b").Equals(new QueryParameter("a", "b"));
-
+        public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl(null));
+
+        [TestMethod]
         public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
         [TestMethod]
-        public void TestEmptyAbsoluteUrl() => Assert.AreEqual("", AbsoluteUrl.Empty.ToString());
-
+        public void TestToQueryParameter() => "a".ToQueryParameter("b").Equals(new QueryParameter("a", "b"));
 
         [TestMethod]
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-        
+        //TODO: Is this correct?
+        public void TestEmptyAbsoluteUrl() => Assert.AreEqual("://", AbsoluteUrl.Empty.ToString());
     }
 }
 
