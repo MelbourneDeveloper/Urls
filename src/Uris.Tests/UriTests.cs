@@ -107,7 +107,7 @@ namespace Urls.UnitTests
         [TestMethod]
         public void TestComposition2()
         {
-            var uri =
+            var absoluteUri =
                 Host.ToHttpUriFromHost(Port)
                 .AddQueryParameter(FieldName1, FieldValue1)
                 .WithCredentials(Username, Password)
@@ -117,7 +117,7 @@ namespace Urls.UnitTests
 
             Assert.AreEqual(
                 expected,
-                uri.ToString());
+                absoluteUri.ToString());
         }
 
         [TestMethod]
