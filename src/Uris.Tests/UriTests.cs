@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 
 #pragma warning disable CA1055 // Url-like return values should not be strings
 #pragma warning disable IDE0057 // Use range operator
@@ -41,8 +42,8 @@ namespace Urls.UnitTests
             var absoluteUrl2 = (AbsoluteUrl)uri;
 
             Assert.AreEqual(uri, absoluteUrl1);
-            Assert.AreEqual(uri.ToString(), absoluteUrl2.ToString());
-            Assert.AreEqual(absoluteUrl1.ToString(), uri.ToString());
+            Assert.AreEqual(uri.ToString(), WebUtility.UrlDecode(absoluteUrl2.ToString()));
+            Assert.AreEqual(WebUtility.UrlDecode(absoluteUrl1.ToString()), uri.ToString());
             Assert.AreEqual(absoluteUrl1, absoluteUrl2);
             Assert.AreEqual(absoluteUrl2, uri);
             Assert.AreEqual(absoluteUrl2, absoluteUrl1);
