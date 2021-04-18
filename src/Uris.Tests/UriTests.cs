@@ -327,6 +327,7 @@ namespace Urls.UnitTests
             Assert.AreEqual("a", RelativeUrl.QueryParameters[0].FieldName);
             Assert.AreEqual(null, RelativeUrl.QueryParameters[0].Value);
             Assert.AreEqual("a", RelativeUrl.Fragment);
+            Assert.AreEqual("/a/a?a#a", RelativeUrl.ToString());
         }
 
         [TestMethod]

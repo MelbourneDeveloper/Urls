@@ -14,7 +14,7 @@ namespace Urls
         }
 
         public override string ToString()
-            => $"{FieldName}={WebUtility.UrlEncode(Value)}";
+            => $"{FieldName}{(Value != null ? "=" : "")}{WebUtility.UrlEncode(Value)}";
     }
 }
 
