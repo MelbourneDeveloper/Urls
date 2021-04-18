@@ -65,6 +65,46 @@ namespace Urls
                     );
         }
 
+        public static RelativeUrl ToRelativeUrl(this string relativeUrlString)
+        {
+            if (relativeUrlString == null) throw new ArgumentNullException(nameof(relativeUrlString));
+
+            if (string.IsNullOrEmpty(relativeUrlString)) return RelativeUrl.Empty;
+
+            var fragment = "";
+            var queryString = "";
+
+            var tokens = relativeUrlString.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (tokens.Length > 1) fragment = tokens[1];
+
+            tokens = tokens[0].Split(new char[] { '?' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (tokens.Length > 1) queryString = tokens[1];
+
+            var pathString = tokens[0];
+
+            var path = ImmutableList.Create(pathString.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
+
+            var queryParametersList = new List<QueryParameter>();
+
+            var queryParameterTokens = new string[0];
+            if (queryString.Length >= 1)
+            {
+                queryParameterTokens = queryString.Substring(1).Split(new char[] { '&' });
+            }
+
+            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
+                => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
+
+            return new RelativeUrl(
+                    path,
+                    queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
+                    fragment
+                    );
+        }
+
+
         public static AbsoluteUrl WithRelativeUrl(this AbsoluteUrl absoluteUrl, RelativeUrl relativeUrl)
         =>
         absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :

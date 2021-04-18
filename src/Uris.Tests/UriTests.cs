@@ -288,20 +288,24 @@ namespace Urls.UnitTests
         [TestMethod]
         public void TestRelativeUrlConstructors()
         {
-            var RelativeUrl = new RelativeUrl("a/a");
+            var RelativeUrl = "a/a".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "a" }));
 
-            RelativeUrl = new RelativeUrl("a/");
+            RelativeUrl = "a/".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a" }));
 
-            RelativeUrl = new RelativeUrl("a/b/c");
+            RelativeUrl = "a/b/c".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "b", "c" }));
 
-            RelativeUrl = new RelativeUrl("a/b/c/");
+            RelativeUrl = "a/b/c/".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "b", "c" }));
 
-            RelativeUrl = new RelativeUrl("");
+            RelativeUrl = "".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { }));
+
+            RelativeUrl = "?asd=1".ToRelativeUrl();
+            Assert.AreEqual("asd", RelativeUrl.QueryParameters[0].FieldName);
+            Assert.AreEqual("1", RelativeUrl.QueryParameters[0].Value);
         }
 
         [TestMethod]
@@ -334,7 +338,7 @@ namespace Urls.UnitTests
         [TestMethod]
         public void TestWithRelative2()
         {
-            var relativeUrl = new RelativeUrl("/JsonPerson?personKey=123");
+            var relativeUrl = "/JsonPerson?personKey=123".ToRelativeUrl();
             Assert.AreEqual("personKey", relativeUrl.QueryParameters.First().FieldName);
         }
 
@@ -359,7 +363,7 @@ namespace Urls.UnitTests
         public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl((RelativeUrl)null));
+        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl(null));
 
         [TestMethod]
         public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));
