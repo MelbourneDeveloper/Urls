@@ -55,7 +55,11 @@ namespace Urls
             other.QueryParameters.SequenceEqual(QueryParameters);
 
         // Optional: warning generated if not supplied when Equals(R?) is user-defined.
-        public override int GetHashCode() => 1;
+        public override int GetHashCode() => ToString().GetHashCode(
+#if NET5_0
+            StringComparison.InvariantCultureIgnoreCase
+#endif
+            );
 
     }
 }

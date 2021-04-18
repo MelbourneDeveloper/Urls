@@ -59,6 +59,7 @@ namespace Urls.UnitTests
             Assert.IsTrue(absoluteUrl1.RelativeUrl.QueryParameters.SequenceEqual(absoluteUrl2.RelativeUrl.QueryParameters));
             Assert.AreEqual(absoluteUrl1.RelativeUrl, absoluteUrl2.RelativeUrl);
 
+            Assert.AreEqual(absoluteUrl1.RelativeUrl.GetHashCode(), absoluteUrl2.RelativeUrl.GetHashCode());
 
             Assert.AreEqual(absoluteUrl1, absoluteUrl2);
             Assert.AreEqual(absoluteUrl2, uri);
@@ -263,9 +264,9 @@ namespace Urls.UnitTests
             Assert.AreEqual(uri.Scheme, Scheme);
             Assert.AreEqual(uri.RelativeUrl.Fragment, Fragment);
             Assert.AreEqual(uri.RelativeUrl.QueryParameters.First().FieldName, FieldName1);
-            Assert.AreEqual(uri.RelativeUrl.QueryParameters.First().Value, FieldValueEncoded1);
+            Assert.AreEqual(uri.RelativeUrl.QueryParameters.First().Value, FieldValue1);
             Assert.AreEqual(uri.RelativeUrl.QueryParameters[1].FieldName, FieldName2);
-            Assert.AreEqual(uri.RelativeUrl.QueryParameters[1].Value, FieldValueEncoded2);
+            Assert.AreEqual(uri.RelativeUrl.QueryParameters[1].Value, FieldValue2);
             Assert.AreEqual(Host, uri.Host);
             Assert.AreEqual(Port, uri.Port);
             Assert.AreEqual(PathPart1, uri.RelativeUrl.Path[0]);
