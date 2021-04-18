@@ -35,6 +35,14 @@ namespace Urls.UnitTests
 
 
         [TestMethod]
+        public void TestQueryParameterEquality()
+        {
+            var qp1 = new QueryParameter("n", "v");
+            var qp2 = new QueryParameter("n", "v");
+            Assert.AreEqual(qp1, qp2);
+        }
+
+        [TestMethod]
         public void TestEquality()
         {
             var absoluteUrl1 = expected.ToAbsoluteUrl();
@@ -44,6 +52,14 @@ namespace Urls.UnitTests
             Assert.AreEqual(uri, absoluteUrl1);
             Assert.AreEqual(uri.ToString(), WebUtility.UrlDecode(absoluteUrl2.ToString()));
             Assert.AreEqual(WebUtility.UrlDecode(absoluteUrl1.ToString()), uri.ToString());
+            Assert.AreEqual(absoluteUrl1.ToString(), absoluteUrl2.ToString());
+
+            //Just here to get more granular
+            Assert.AreEqual(absoluteUrl1.UserInfo, absoluteUrl2.UserInfo);
+            Assert.AreEqual(absoluteUrl1.RelativeUrl.QueryParameters, absoluteUrl2.RelativeUrl.QueryParameters);
+            Assert.AreEqual(absoluteUrl1.RelativeUrl, absoluteUrl2.RelativeUrl);
+
+
             Assert.AreEqual(absoluteUrl1, absoluteUrl2);
             Assert.AreEqual(absoluteUrl2, uri);
             Assert.AreEqual(absoluteUrl2, absoluteUrl1);

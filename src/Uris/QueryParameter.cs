@@ -4,8 +4,8 @@ namespace Urls
 {
     public record QueryParameter
     {
-        public string FieldName { get; init; }
-        public string? Value { get; init; }
+        public string FieldName { get; }
+        public string? Value { get; }
 
         public QueryParameter(string fieldName, string? value)
         {
