@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 #pragma warning disable IDE0057 // Use range operator
+
+[assembly: InternalsVisibleTo("Urls.Tests")]
 
 namespace Urls
 {
     public static class UrlExtensions
     {
+        internal const string ErrorMessageMustBeAbsolute = "The Uri must be an absolute Uri";
+
         public static Uri ToUri(this AbsoluteUrl url) =>
             url == null ? throw new ArgumentNullException(nameof(url)) :
             new Uri(url.ToString());
@@ -16,6 +21,8 @@ namespace Urls
         public static AbsoluteUrl ToAbsoluteUrl(this Uri uri)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
+
+            if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
             var userInfoTokens = uri.UserInfo?.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 

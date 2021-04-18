@@ -279,6 +279,11 @@ namespace Urls.UnitTests
             Assert.AreEqual(Password, uri.UserInfo?.Password);
         }
 
+        [TestMethod]
+        public void TestRelativeToAbsolute()
+            => Assert.AreEqual(UrlExtensions.ErrorMessageMustBeAbsolute, Assert.ThrowsException<InvalidOperationException>(()
+                => new Uri("", UriKind.Relative).ToAbsoluteUrl()).Message
+                );
 
         [TestMethod]
         public void TestRelativeUrlConstructors()
@@ -354,7 +359,7 @@ namespace Urls.UnitTests
         public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl(null));
+        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl((RelativeUrl)null));
 
         [TestMethod]
         public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));
