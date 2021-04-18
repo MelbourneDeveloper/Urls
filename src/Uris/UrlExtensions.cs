@@ -65,6 +65,8 @@ namespace Urls
                     );
         }
 
+        //TODO: this looks mighty similar to the above. How to merge?
+
         public static RelativeUrl ToRelativeUrl(this string relativeUrlString)
         {
             if (relativeUrlString == null) throw new ArgumentNullException(nameof(relativeUrlString));
@@ -74,24 +76,27 @@ namespace Urls
             var fragment = "";
             var queryString = "";
 
-            var tokens = relativeUrlString.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+            var tokens = relativeUrlString.Split(new char[] { '#' }, StringSplitOptions.None);
 
             if (tokens.Length > 1) fragment = tokens[1];
 
-            tokens = tokens[0].Split(new char[] { '?' }, StringSplitOptions.RemoveEmptyEntries);
+            tokens = tokens[0].Split(new char[] { '?' }, StringSplitOptions.None);
 
             if (tokens.Length > 1) queryString = tokens[1];
 
             var pathString = tokens[0];
 
-            var path = ImmutableList.Create(pathString.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
+            var path = ImmutableList.Create(
+                pathString.Split(new char[] { '/' }, StringSplitOptions.None)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToArray());
 
             var queryParametersList = new List<QueryParameter>();
 
             var queryParameterTokens = new string[0];
             if (queryString.Length >= 1)
             {
-                queryParameterTokens = queryString.Substring(1).Split(new char[] { '&' });
+                queryParameterTokens = queryString.Split(new char[] { '&' });
             }
 
             queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
