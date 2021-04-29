@@ -54,6 +54,6 @@ namespace Urls
             new Uri(absoluteUrl.ToString());
 
         public static explicit operator AbsoluteUrl(Uri uri) => uri.ToAbsoluteUrl();
-    };
+    }
 }
 

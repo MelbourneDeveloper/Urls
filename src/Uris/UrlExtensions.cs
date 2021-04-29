@@ -23,7 +23,7 @@ namespace Urls
             if (uri == null) throw new ArgumentNullException(nameof(uri));
             if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
-            var userInfoTokens = uri.UserInfo?.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+            var userInfoTokens = uri.UserInfo?.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
             var relativeUrl = ToRelativeUrl(uri);
 
@@ -43,20 +43,20 @@ namespace Urls
             if (uri == null) throw new ArgumentNullException(nameof(uri));
             if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
-            var path = ImmutableList.Create(uri.LocalPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
+            var path = ImmutableList.Create(uri.LocalPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
 
             var queryParametersList = new List<QueryParameter>();
 
             var queryParameterTokens = new string[0];
-            if (uri.Query != null && uri.Query.Length >= 1)
+            if (uri.Query.Length >= 1)
             {
-                queryParameterTokens = uri.Query.Substring(1).Split(new char[] { '&' });
+                queryParameterTokens = uri.Query.Substring(1).Split(new[] { '&' });
             }
 
-            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
+            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
 
-            var fragment = uri.Fragment != null && uri.Fragment.Length >= 1 ? uri.Fragment.Substring(1) : "";
+            var fragment = uri.Fragment.Length >= 1 ? uri.Fragment.Substring(1) : "";
 
             return new RelativeUrl(
                     path,
@@ -76,18 +76,18 @@ namespace Urls
             var fragment = "";
             var queryString = "";
 
-            var tokens = relativeUrlString.Split(new char[] { '#' }, StringSplitOptions.None);
+            var tokens = relativeUrlString.Split(new[] { '#' }, StringSplitOptions.None);
 
             if (tokens.Length > 1) fragment = tokens[1];
 
-            tokens = tokens[0].Split(new char[] { '?' }, StringSplitOptions.None);
+            tokens = tokens[0].Split(new[] { '?' }, StringSplitOptions.None);
 
             if (tokens.Length > 1) queryString = tokens[1];
 
             var pathString = tokens[0];
 
             var path = ImmutableList.Create(
-                pathString.Split(new char[] { '/' }, StringSplitOptions.None)
+                pathString.Split(new[] { '/' }, StringSplitOptions.None)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .ToArray());
 
@@ -96,10 +96,10 @@ namespace Urls
             var queryParameterTokens = new string[0];
             if (queryString.Length >= 1)
             {
-                queryParameterTokens = queryString.Split(new char[] { '&' });
+                queryParameterTokens = queryString.Split(new[] { '&' });
             }
 
-            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new char[] { '=' })).Select(keyAndValue
+            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new[] { '=' })).Select(keyAndValue
                 => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
 
             return new RelativeUrl(

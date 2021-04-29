@@ -295,16 +295,16 @@ namespace Urls.UnitTests
         public void TestRelativeUrlConstructors()
         {
             var RelativeUrl = "a/a".ToRelativeUrl();
-            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "a" }));
+            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new[] { "a", "a" }));
 
             RelativeUrl = "a/".ToRelativeUrl();
-            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a" }));
+            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new[] { "a" }));
 
             RelativeUrl = "a/b/c".ToRelativeUrl();
-            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "b", "c" }));
+            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new[] { "a", "b", "c" }));
 
             RelativeUrl = "a/b/c/".ToRelativeUrl();
-            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { "a", "b", "c" }));
+            Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new[] { "a", "b", "c" }));
 
             RelativeUrl = "".ToRelativeUrl();
             Assert.IsTrue(RelativeUrl.Path.SequenceEqual(new string[] { }));
