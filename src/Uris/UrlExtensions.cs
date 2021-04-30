@@ -188,5 +188,8 @@ namespace Urls
             absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
             absoluteUrl with { RelativeUrl = absoluteUrl.RelativeUrl.AppendPath(args) };
 
+        public static ImmutableList<QueryParameter> ToQueryParameters(this QueryParameter queryParameter)
+        => new List<QueryParameter> { queryParameter }.ToImmutableList();
+
     }
 }

@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
@@ -422,11 +424,24 @@ namespace Urls.UnitTests
         [TestMethod]
         public void TestCanUseWith()
         {
-            var asdasd = new QueryParameter("a", "a") with { FieldName = "b", Value = "<b" };
-            Assert.AreEqual("b", asdasd.FieldName);
-            Assert.AreEqual("<b", asdasd.Value);
-            Assert.AreEqual("b=%3Cb", asdasd.ToString());
+            const string bee = "b";
+            const string ay = "a";
+            var queryParameter = new QueryParameter(ay, ay) with { FieldName = bee, Value = "<b" };
+            Assert.AreEqual(bee, queryParameter.FieldName);
+            Assert.AreEqual("<b", queryParameter.Value);
+            Assert.AreEqual("b=%3Cb", queryParameter.ToString());
+
+            var relativeUrl = RelativeUrl.Empty with
+            {
+                Fragment = bee,
+                Path = new List<string> { bee }.ToImmutableList(),
+                QueryParameters = queryParameter.ToQueryParameters()
+            };
+            Assert.AreEqual(bee, relativeUrl.Fragment);
+            Assert.IsTrue(queryParameter.ToQueryParameters().SequenceEqual(relativeUrl.QueryParameters));
+
         }
+
     }
 }
 
