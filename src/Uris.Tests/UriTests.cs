@@ -294,6 +294,13 @@ namespace Urls.UnitTests
             );
 
         [TestMethod]
+        public void TestRelativeUrl()
+        {
+            var RelativeUrl = "/".ToRelativeUrl();
+            Assert.AreEqual(string.Empty, RelativeUrl.ToString());
+        }
+
+        [TestMethod]
         public void TestRelativeUrlConstructors()
         {
             var RelativeUrl = "a/a".ToRelativeUrl();

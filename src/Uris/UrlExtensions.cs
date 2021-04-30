@@ -73,16 +73,13 @@ namespace Urls
 
             if (string.IsNullOrEmpty(relativeUrlString)) return RelativeUrl.Empty;
 
-            var fragment = "";
-            var queryString = "";
-
             var tokens = relativeUrlString.Split(new[] { '#' }, StringSplitOptions.None);
 
-            if (tokens.Length > 1) fragment = tokens[1];
+            var fragment = tokens.Length > 1 ? tokens[1] : "";
 
             tokens = tokens[0].Split(new[] { '?' }, StringSplitOptions.None);
 
-            if (tokens.Length > 1) queryString = tokens[1];
+            var queryString = tokens.Length > 1 ? tokens[1] : "";
 
             var pathString = tokens[0];
 
