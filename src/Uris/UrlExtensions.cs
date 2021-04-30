@@ -88,16 +88,12 @@ namespace Urls
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .ToArray());
 
-            var queryParametersList = new List<QueryParameter>();
-
-            var queryParameterTokens = new string[0];
-            if (queryString.Length >= 1)
-            {
-                queryParameterTokens = queryString.Split(new[] { '&' });
-            }
-
-            queryParametersList.AddRange(queryParameterTokens.Select(keyValueString => keyValueString.Split(new[] { '=' })).Select(keyAndValue
-                => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null)));
+            var queryParametersList = queryString.Length >= 1 ?
+                queryString.Split(new[] { '&' })
+                .Select(keyValueString => keyValueString.Split(new[] { '=' }))
+                .Select(keyAndValue => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null))
+                .ToList()
+                : new List<QueryParameter>();
 
             return new RelativeUrl(
                     path,

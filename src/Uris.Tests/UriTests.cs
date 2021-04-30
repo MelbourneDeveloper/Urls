@@ -298,6 +298,7 @@ namespace Urls.UnitTests
         {
             var RelativeUrl = "/".ToRelativeUrl();
             Assert.AreEqual(string.Empty, RelativeUrl.ToString());
+            Assert.IsTrue(RelativeUrl.QueryParameters.Count == 0);
         }
 
         [TestMethod]
