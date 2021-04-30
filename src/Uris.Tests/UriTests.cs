@@ -433,6 +433,9 @@ namespace Urls.UnitTests
             Assert.AreEqual(0, QueryParameter.EmptyList.Count);
         }
 
+        [TestMethod]
+        public void TestToQueryParameters() => Assert.AreEqual("a", new QueryParameter("a", "a").ToQueryParameters()[0].FieldName);
+
 
         [TestMethod]
         public void TestCanUseWith()
