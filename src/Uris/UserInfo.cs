@@ -8,6 +8,8 @@ namespace Urls
         string Password
     )
     {
+        public static UserInfo Empty { get; } = new("", "");
+
         public UserInfo(UserInfo userInfo)
         {
             if (userInfo == null) throw new ArgumentNullException(nameof(userInfo));

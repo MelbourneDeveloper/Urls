@@ -20,7 +20,7 @@ namespace Urls
         IReadOnlyList<string>? path = null,
         IReadOnlyList<QueryParameter>? query = null,
         string? fragment = null) : this(path != null ? path.ToImmutableList() :
-        ImmutableList<string>.Empty, query?.ToImmutableList() ?? ImmutableList<QueryParameter>.Empty, fragment ?? "")
+        ImmutableList<string>.Empty, query?.ToImmutableList() ?? QueryParameter.EmptyList, fragment ?? "")
         {
         }
 
@@ -39,7 +39,7 @@ namespace Urls
             Fragment = relativeUrl.Fragment;
         }
 
-        public static RelativeUrl Empty { get; } = new(ImmutableList<string>.Empty, ImmutableList<QueryParameter>.Empty);
+        public static RelativeUrl Empty { get; } = new(ImmutableList<string>.Empty, QueryParameter.EmptyList);
 
         public override string ToString()
         =>

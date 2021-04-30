@@ -425,8 +425,13 @@ namespace Urls.UnitTests
         public void TestToQueryParameter() => "a".ToQueryParameter("b").Equals(new QueryParameter("a", "b"));
 
         [TestMethod]
-        //TODO: Is this correct?
-        public void TestEmptyAbsoluteUrl() => Assert.AreEqual("://", AbsoluteUrl.Empty.ToString());
+        public void TestEmpty()
+        {
+            Assert.AreEqual("://", AbsoluteUrl.Empty.ToString());
+            Assert.AreEqual("", UserInfo.Empty.ToString());
+            Assert.AreEqual("", RelativeUrl.Empty.ToString());
+            Assert.AreEqual(0, QueryParameter.EmptyList.Count);
+        }
 
 
         [TestMethod]

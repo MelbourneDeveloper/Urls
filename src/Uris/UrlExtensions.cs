@@ -28,7 +28,7 @@ namespace Urls
             var relativeUrl = ToRelativeUrl(uri);
 
             var userInfo = userInfoTokens != null && userInfoTokens.Length > 0 ? new UserInfo(userInfoTokens.First(),
-                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : new("", "");
+                                   userInfoTokens.Length > 1 ? userInfoTokens[1] : "") : UserInfo.Empty;
 
             return new AbsoluteUrl(
                 uri.Scheme,
