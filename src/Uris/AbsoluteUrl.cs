@@ -20,7 +20,7 @@ namespace Urls
         string scheme,
         string host,
         int? port = null,
-        RelativeUrl? requestUri = null) : this(scheme, host, port, requestUri ?? RelativeUrl.Empty, new("", ""))
+        RelativeUrl? requestUri = null) : this(scheme, host, port, requestUri ?? RelativeUrl.Empty, UserInfo.Empty)
         {
 
         }
