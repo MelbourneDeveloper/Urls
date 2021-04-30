@@ -4,13 +4,21 @@ namespace Urls
 {
     public record QueryParameter
     {
-        public string FieldName { get; }
-        public string? Value { get; }
+        private string? fieldValue;
+
+        public string FieldName { get; init; }
+        public string? Value
+        {
+            get => fieldValue; init
+            {
+                fieldValue = WebUtility.UrlDecode(value);
+            }
+        }
 
         public QueryParameter(string fieldName, string? value)
         {
             FieldName = fieldName;
-            Value = WebUtility.UrlDecode(value);
+            fieldValue = WebUtility.UrlDecode(value);
         }
 
         public override string ToString()

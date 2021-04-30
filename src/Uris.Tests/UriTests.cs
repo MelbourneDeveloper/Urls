@@ -417,6 +417,16 @@ namespace Urls.UnitTests
         [TestMethod]
         //TODO: Is this correct?
         public void TestEmptyAbsoluteUrl() => Assert.AreEqual("://", AbsoluteUrl.Empty.ToString());
+
+
+        [TestMethod]
+        public void TestCanUseWith()
+        {
+            var asdasd = new QueryParameter("a", "a") with { FieldName = "b", Value = "<b" };
+            Assert.AreEqual("b", asdasd.FieldName);
+            Assert.AreEqual("<b", asdasd.Value);
+            Assert.AreEqual("b=%3Cb", asdasd.ToString());
+        }
     }
 }
 
