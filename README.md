@@ -1,10 +1,10 @@
 # Urls
 
-Treat Urls as first class citizens
+Treat Urls as first-class citizens
 
 [Nuget](https://www.nuget.org/packages/Urls)
 
-Urls is a .NET library of [records](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/records) that represent Urls. All properties are immutable and there are a collection of Fluent API style extension methods to make Url construction easy. Use the `with` syntax to create new Urls easily, and make Http calls with [RestClient.Net](https://github.com/MelbourneDeveloper/RestClient.Net/tree/5/develop). 
+Urls is a .NET library of [records](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/records) that represent Urls. All properties are immutable, and there are a collection of Fluent API style extension methods to make Url construction easy. I designed this library with F# in mind. Use the `with` syntax to create new Urls easily and make HTTP calls with [RestClient.Net](https://github.com/MelbourneDeveloper/RestClient.Net/tree/5/develop). 
 
 #### C#
 
