@@ -6,6 +6,8 @@ Treat Urls as first class citizens
 
 Urls is a .NET library of [records](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/records) that represent Urls. All properties are immutable and there are a collection of Fluent API style extension methods to make Url construction easy. Use the `with` syntax to create new Urls easily, and make Http calls with [RestClient.Net](https://github.com/MelbourneDeveloper/RestClient.Net/tree/5/develop). 
 
+#### C#
+
 ```cs
 private readonly string expected = $"{Scheme}://{Username}:{Password}@{Host}:{Port}/{PathPart1}/{PathPart2}?" +
   $"{FieldName1}={FieldValueEncoded1}&{FieldName2}={FieldValueEncoded2}#{Fragment}";
@@ -26,6 +28,8 @@ public void TestComposition2()
         absoluteUri.ToString());
 }
 ```
+
+#### F#
 
 ```fs
 [<TestMethod>]
