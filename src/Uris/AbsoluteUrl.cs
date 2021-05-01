@@ -28,7 +28,8 @@ namespace Urls
         public AbsoluteUrl(AbsoluteUrl
             absoluteUrl)
         {
-            if (absoluteUrl == null) throw new ArgumentNullException(nameof(absoluteUrl));
+            absoluteUrl ??= Empty;
+
             Scheme = absoluteUrl.Scheme;
             Host = absoluteUrl.Host;
             Port = absoluteUrl.Port;

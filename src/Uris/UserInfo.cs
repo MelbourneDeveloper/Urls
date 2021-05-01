@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Urls
+﻿namespace Urls
 {
     public record UserInfo
     (
@@ -12,7 +10,7 @@ namespace Urls
 
         public UserInfo(UserInfo userInfo)
         {
-            if (userInfo == null) throw new ArgumentNullException(nameof(userInfo));
+            userInfo ??= Empty;
 
             Username = userInfo.Username;
             Password = userInfo.Password;

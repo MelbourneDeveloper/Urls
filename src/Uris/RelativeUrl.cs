@@ -12,17 +12,26 @@ namespace Urls
 
     (
          ImmutableList<string> Path,
-         ImmutableList<QueryParameter> QueryParameters,
-         string Fragment
+         ImmutableList<QueryParameter> QueryParameters
     )
     {
+
+        private string fragment = "";
+
+        public string Fragment
+        {
+            get => fragment;
+            init
+            {
+                fragment = value ?? "";
+            }
+        }
+
         public RelativeUrl(
         IReadOnlyList<string>? path = null,
         IReadOnlyList<QueryParameter>? query = null,
-        string? fragment = null) : this(path != null ? path.ToImmutableList() :
-        ImmutableList<string>.Empty, query?.ToImmutableList() ?? QueryParameter.EmptyList, fragment ?? "")
-        {
-        }
+        string fragment = "") : this(
+            path != null ? path.ToImmutableList() : ImmutableList<string>.Empty, query?.ToImmutableList() ?? QueryParameter.EmptyList) => this.fragment = fragment ?? "";
 
         public RelativeUrl(
 #pragma warning disable CA1054 // URI-like parameters should not be strings
@@ -33,10 +42,11 @@ namespace Urls
 
         public RelativeUrl(RelativeUrl relativeUrl)
         {
-            if (relativeUrl == null) throw new ArgumentNullException(nameof(relativeUrl));
+            relativeUrl ??= Empty;
+
             Path = relativeUrl.Path;
             QueryParameters = relativeUrl.QueryParameters;
-            Fragment = relativeUrl.Fragment;
+            fragment = relativeUrl.Fragment ?? "";
         }
 
         public static RelativeUrl Empty { get; } = new(ImmutableList<string>.Empty, QueryParameter.EmptyList);

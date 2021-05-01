@@ -172,6 +172,23 @@ namespace Urls.UnitTests
                 relativeRelativeUrl.Fragment);
         }
 
+#pragma warning disable IDE0034 // Simplify 'default' expression
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        [TestMethod]
+        public void TestRelativeWithNullFragment()
+        {
+            var relativeRelativeUrl = new RelativeUrl(ImmutableList.Create(PathPart1, PathPart2), QueryParameter.EmptyList, default(string));
+            Assert.AreEqual("", relativeRelativeUrl.Fragment);
+
+            relativeRelativeUrl = new RelativeUrl(ImmutableList.Create(PathPart1, PathPart2), QueryParameter.EmptyList, null);
+            Assert.AreEqual("", relativeRelativeUrl.Fragment);
+
+            relativeRelativeUrl = new RelativeUrl(default(RelativeUrl));
+            Assert.AreEqual("", relativeRelativeUrl.Fragment);
+        }
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore IDE0034 // Simplify 'default' expression
+
         [TestMethod]
         public void TestWithQueryStringStrings()
         {
@@ -411,13 +428,13 @@ namespace Urls.UnitTests
         public void TestToRelativeUriNullGuard2() => Assert.ThrowsException<ArgumentNullException>(() => ((string)null).ToRelativeUrl());
 
         [TestMethod]
-        public void TestAbsoluteUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new AbsoluteUrl((AbsoluteUrl)null));
+        public void TestAbsoluteUrlNullIsEmpty() => Assert.AreEqual(AbsoluteUrl.Empty, new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-        public void TestRelativeUrlNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new RelativeUrl((RelativeUrl)null));
+        public void TestRelativeUrlNullIsEmpty() => Assert.AreEqual(RelativeUrl.Empty, new RelativeUrl((RelativeUrl)null));
 
         [TestMethod]
-        public void TestUserInfoNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => new UserInfo(null));
+        public void TestUserInfoNullIsEmpty() => Assert.AreEqual(UserInfo.Empty, new UserInfo(null));
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
