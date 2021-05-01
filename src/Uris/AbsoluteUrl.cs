@@ -4,6 +4,9 @@
 
 namespace Urls
 {
+    /// <summary>
+    /// Represents a Url with all information
+    /// </summary>
     public record AbsoluteUrl
     (
         string Scheme,

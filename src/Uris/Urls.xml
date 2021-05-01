@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Urls</name>
+    </assembly>
+    <members>
+        <member name="T:Urls.AbsoluteUrl">
+            <summary>
+            Represents a Url with all information
+            </summary>
+        </member>
+        <member name="M:Urls.AbsoluteUrl.#ctor(System.String,System.String,System.Nullable{System.Int32},Urls.RelativeUrl,Urls.UserInfo)">
+            <summary>
+            Represents a Url with all information
+            </summary>
+        </member>
+        <member name="T:Urls.QueryParameter">
+            <summary>
+            Represents a singular Query parameter as part of a Query String
+            </summary>
+        </member>
+        <member name="T:Urls.RelativeUrl">
+            <summary>
+            Represents a Url without the specifics of the server address
+            </summary>
+        </member>
+        <member name="M:Urls.RelativeUrl.#ctor(System.Collections.Immutable.ImmutableList{System.String},System.Collections.Immutable.ImmutableList{Urls.QueryParameter})">
+            <summary>
+            Represents a Url without the specifics of the server address
+            </summary>
+        </member>
+        <member name="T:Urls.UserInfo">
+            <summary>
+            Url credentials. Warning: using this is not recommended. This is here for completeness
+            </summary>
+        </member>
+        <member name="M:Urls.UserInfo.#ctor(System.String,System.String)">
+            <summary>
+            Url credentials. Warning: using this is not recommended. This is here for completeness
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -7,6 +7,10 @@
 		<Version>0.9.0-alpha</Version>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+	  <DocumentationFile>Urls.xml</DocumentationFile>
+	</PropertyGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
 		<Compile Remove="IsExternalInit.cs" />
 	</ItemGroup>

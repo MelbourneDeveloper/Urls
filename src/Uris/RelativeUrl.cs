@@ -6,7 +6,7 @@ using System.Linq;
 namespace Urls
 {
     /// <summary>
-    /// Represents a Url without the Host, Scheme, Port or UserInfo 
+    /// Represents a Url without the specifics of the server address
     /// </summary>
     public record RelativeUrl
 
@@ -15,9 +15,11 @@ namespace Urls
          ImmutableList<QueryParameter> QueryParameters
     )
     {
-
+        #region Fields
         private string fragment = "";
+        #endregion
 
+        #region Public Properties
         public string Fragment
         {
             get => fragment;
@@ -26,7 +28,9 @@ namespace Urls
                 fragment = value ?? "";
             }
         }
+        #endregion
 
+        #region Constructors
         public RelativeUrl(
         IReadOnlyList<string>? path = null,
         IReadOnlyList<QueryParameter>? query = null,
@@ -50,7 +54,9 @@ namespace Urls
         }
 
         public static RelativeUrl Empty { get; } = new(ImmutableList<string>.Empty, QueryParameter.EmptyList);
+        #endregion
 
+        #region Public Methods
         public override string ToString()
         =>
         (Path.Count > 0 ? $"/{string.Join("/", Path)}" : "") +
@@ -69,7 +75,7 @@ namespace Urls
             StringComparison.InvariantCultureIgnoreCase
 #endif
             );
-
+        #endregion
     }
 }
 
