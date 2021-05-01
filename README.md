@@ -13,9 +13,9 @@ private readonly string expected = $"{Scheme}://{Username}:{Password}@{Host}:{Po
   $"{FieldName1}={FieldValueEncoded1}&{FieldName2}={FieldValueEncoded2}#{Fragment}";
 
 [TestMethod]
-public void TestComposition2()
+public void TestComposition()
 {
-    var absoluteUri =
+    var absoluteUrl =
         Host.ToHttpUriFromHost(Port)
         .AddQueryParameter(FieldName1, FieldValue1)
         .WithCredentials(Username, Password)
@@ -25,7 +25,12 @@ public void TestComposition2()
 
     Assert.AreEqual(
         expected,
-        absoluteUri.ToString());
+        absoluteUrl.ToString());
+
+    //C# 9 records non-destructive mutation (with syntax)
+    var absoluteUrl2 = absoluteUrl with { Port = 1000 };
+
+    Assert.AreEqual(1000, absoluteUrl2.Port);
 }
 ```
 
