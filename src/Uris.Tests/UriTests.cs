@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -91,9 +90,9 @@ namespace Urls.UnitTests
         }
 
         [TestMethod]
-        public void TestComposition()
+        public void TestComposition2()
         {
-            var uri =
+            var url =
                 new AbsoluteUrl(Scheme, Host, Port)
                 .AddQueryParameter(FieldName1, FieldValue1)
                 .WithCredentials(Username, Password)
@@ -103,13 +102,13 @@ namespace Urls.UnitTests
 
             Assert.AreEqual(
                 expected,
-                uri.ToString());
+                url.ToString());
         }
 
         [TestMethod]
-        public void TestComposition2()
+        public void TestComposition()
         {
-            var absoluteUri =
+            var absoluteUrl =
                 Host.ToHttpUriFromHost(Port)
                 .AddQueryParameter(FieldName1, FieldValue1)
                 .WithCredentials(Username, Password)
@@ -119,7 +118,12 @@ namespace Urls.UnitTests
 
             Assert.AreEqual(
                 expected,
-                absoluteUri.ToString());
+                absoluteUrl.ToString());
+
+            //C# 9 records non-destructive mutation (with syntax)
+            var absoluteUrl2 = absoluteUrl with { Port = 1000 };
+
+            Assert.AreEqual(1000, absoluteUrl2.Port);
         }
 
         [TestMethod]
