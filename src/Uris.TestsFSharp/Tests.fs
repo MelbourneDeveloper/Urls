@@ -22,7 +22,7 @@ type TestClass () =
     member this.TestComposition () =
 
         let uri =
-         "host.com".ToHttpUriFromHost(5000)
+         "host.com".ToHttpUrlFromHost(5000)
             .AddQueryParameter("fieldname1", "field<>Value1")
             .WithCredentials("username", "password")
             .AddQueryParameter("FieldName2", "field<>Value2")

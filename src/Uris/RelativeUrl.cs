@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if !NET45
+using System;
+#endif
+
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
