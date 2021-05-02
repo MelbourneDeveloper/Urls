@@ -26,7 +26,14 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore src/Urls.sln
+      
     - name: Build
       run: dotnet build src/Urls.sln --no-restore
+      
     - name: Test
       run: dotnet test src/Urls.sln  --no-build --verbosity normal
+      
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
