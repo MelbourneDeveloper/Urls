@@ -2,7 +2,7 @@
 
 Treat Urls as first-class citizens
 
-[![.NET](https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet.yml/badge.svg?branch=5%2Fmain)](https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet.yml)
+[![.NET](https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet.yml)
 
 [Nuget](https://www.nuget.org/packages/Urls) 
 
