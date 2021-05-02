@@ -4,6 +4,9 @@ Treat Urls as first-class citizens
 
 https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet/badge.svg
 
+
+[![.NET](https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet.yml/badge.svg?branch=5%2Fmain)](https://github.com/MelbourneDeveloper/Urls/actions/workflows/dotnet.yml)
+
 [Nuget](https://www.nuget.org/packages/Urls) 
 
 | .NET Framework 4.5 | .NET Standard 2.0 | .NET Core 5.0 |
