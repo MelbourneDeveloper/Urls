@@ -431,13 +431,13 @@ namespace Urls.UnitTests
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [TestMethod]
-        public void TestToAbsoluteUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToAbsoluteUrl());
+        public void TestToAbsoluteUriToEmpty() => Assert.AreEqual(AbsoluteUrl.Empty, new AbsoluteUrl((AbsoluteUrl)null));
 
         [TestMethod]
-        public void TestToRelativeUriNullGuard() => Assert.ThrowsException<ArgumentNullException>(() => ((Uri)null).ToRelativeUrl());
+        public void TestToRelativeUriToEmpty() => Assert.AreEqual(RelativeUrl.Empty, new RelativeUrl((RelativeUrl)null));
 
         [TestMethod]
-        public void TestToRelativeUriNullGuard2() => Assert.ThrowsException<ArgumentNullException>(() => ((string)null).ToRelativeUrl());
+        public void TestToRelativeUriToEmpty2() => Assert.AreEqual(RelativeUrl.Empty, new RelativeUrl((RelativeUrl)null));
 
         [TestMethod]
         public void TestAbsoluteUrlNullIsEmpty() => Assert.AreEqual(AbsoluteUrl.Empty, new AbsoluteUrl((AbsoluteUrl)null));
@@ -461,6 +461,13 @@ namespace Urls.UnitTests
             Assert.AreEqual("", RelativeUrl.Empty.ToString());
             Assert.AreEqual(0, QueryParameter.EmptyList.Count);
         }
+
+        //[TestMethod]
+        //public void TestEmptsy()
+        //{
+        //    var asdasds = new RelativeUrl("dasds<///asdsd?j=45/6");
+        //    Assert.IsNotNull(asdasds);
+        //}
 
         [TestMethod]
         public void TestToQueryParameters() => Assert.AreEqual("a", new QueryParameter("a", "a").ToQueryParameters()[0].FieldName);

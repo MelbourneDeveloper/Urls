@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 #pragma warning disable IDE0057 // Use range operator
+#pragma warning disable IDE0007 // Use implicit type
 
 [assembly: InternalsVisibleTo("Urls.Tests")]
 
@@ -20,7 +21,7 @@ namespace Urls
 
         public static AbsoluteUrl ToAbsoluteUrl(this Uri uri)
         {
-            if (uri == null) throw new ArgumentNullException(nameof(uri));
+            if (uri == null) return AbsoluteUrl.Empty;
             if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
             var userInfoTokens = uri.UserInfo?.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -40,7 +41,7 @@ namespace Urls
 
         public static RelativeUrl ToRelativeUrl(this Uri uri)
         {
-            if (uri == null) throw new ArgumentNullException(nameof(uri));
+            if (uri == null) return RelativeUrl.Empty;
             if (!uri.IsAbsoluteUri) throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
             var path = ImmutableList.Create(uri.LocalPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
@@ -69,35 +70,33 @@ namespace Urls
 
         public static RelativeUrl ToRelativeUrl(this string relativeUrlString)
         {
-            if (relativeUrlString == null) throw new ArgumentNullException(nameof(relativeUrlString));
-
             if (string.IsNullOrEmpty(relativeUrlString)) return RelativeUrl.Empty;
 
-            var tokens = relativeUrlString.Split(new[] { '#' }, StringSplitOptions.None);
+            string[] tokens = relativeUrlString.Split(new[] { '#' }, StringSplitOptions.None);
 
-            var fragment = tokens.Length > 1 ? tokens[1] : "";
+            string fragment = tokens.Length > 1 ? tokens[1] : "";
 
             tokens = tokens[0].Split(new[] { '?' }, StringSplitOptions.None);
 
-            var queryString = tokens.Length > 1 ? tokens[1] : "";
+            string queryString = tokens.Length > 1 ? tokens[1] : "";
 
-            var pathString = tokens[0];
+            string pathString = tokens[0];
 
-            var path = ImmutableList.Create(
+            ImmutableList<string> path = ImmutableList.Create(
                 pathString.Split(new[] { '/' }, StringSplitOptions.None)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .ToArray());
 
-            var queryParametersList = queryString.Length >= 1 ?
+            ImmutableList<QueryParameter> queryParametersList = (queryString.Length >= 1 ?
                 queryString.Split(new[] { '&' })
                 .Select(keyValueString => keyValueString.Split(new[] { '=' }))
                 .Select(keyAndValue => new QueryParameter(keyAndValue.First(), keyAndValue.Length > 1 ? keyAndValue[1] : null))
                 .ToList()
-                : new List<QueryParameter>();
+                : new List<QueryParameter>()).ToImmutableList();
 
             return new RelativeUrl(
                     path,
-                    queryParametersList.Count == 0 ? ImmutableList<QueryParameter>.Empty : queryParametersList.ToImmutableList(),
+                    queryParametersList,
                     fragment
                     );
         }
