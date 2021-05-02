@@ -33,7 +33,7 @@ jobs:
     - name: Test
       run: dotnet test src/Urls.sln  --no-build --verbosity normal
       
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Coveralls
+    #   uses: coverallsapp/github-action@master
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
