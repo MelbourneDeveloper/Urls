@@ -158,12 +158,17 @@ namespace Urls
         public static AbsoluteUrl WithPath(this AbsoluteUrl absoluteUrl, params string[] pathSegments)
         => WithPath(absoluteUrl, pathSegments.ToList());
 
-        public static AbsoluteUrl ToHttpUriFromHost(this string host, int? port = null)
+        public static AbsoluteUrl WithPort(this AbsoluteUrl absoluteUrl, int port)
+        =>
+        absoluteUrl == null ? throw new ArgumentNullException(nameof(absoluteUrl)) :
+        absoluteUrl with { Port = port };
+
+        public static AbsoluteUrl ToHttpUrlFromHost(this string host, int? port = null)
         =>
         host == null ? throw new ArgumentNullException(nameof(host)) :
                 new AbsoluteUrl("http", host, port);
 
-        public static AbsoluteUrl ToHttpsUriFromHost(this string host, int? port = null)
+        public static AbsoluteUrl ToHttpsUrlFromHost(this string host, int? port = null)
         =>
         host == null ? throw new ArgumentNullException(nameof(host)) :
                 new AbsoluteUrl("https", host, port);

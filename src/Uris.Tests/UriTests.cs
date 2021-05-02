@@ -106,10 +106,18 @@ namespace Urls.UnitTests
         }
 
         [TestMethod]
+        public void TestLocalFunctionToUri()
+        {
+            static AbsoluteUrl SomeFunctionTakingAUri(Uri uri) => uri.ToAbsoluteUrl();
+            var absoluteUrl = "www.test.com".ToHttpsUrlFromHost().WithPort(443);
+            Assert.AreEqual(absoluteUrl, SomeFunctionTakingAUri(absoluteUrl));
+        }
+
+        [TestMethod]
         public void TestComposition()
         {
             var absoluteUrl =
-                Host.ToHttpUriFromHost(Port)
+                Host.ToHttpUrlFromHost(Port)
                 .AddQueryParameter(FieldName1, FieldValue1)
                 .WithCredentials(Username, Password)
                 .AddQueryParameter(FieldName2, FieldValue2)
@@ -129,7 +137,7 @@ namespace Urls.UnitTests
         [TestMethod]
         public void TestComposition3()
         {
-            var uri = Host.ToHttpsUriFromHost();
+            var uri = Host.ToHttpsUrlFromHost();
 
             Assert.AreEqual(
                 $"https://{Host}",

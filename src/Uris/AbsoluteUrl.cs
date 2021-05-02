@@ -16,8 +16,11 @@ namespace Urls
         UserInfo UserInfo
     )
     {
+        #region Public Properties
         public static AbsoluteUrl Empty { get; } = new AbsoluteUrl("", "");
+        #endregion
 
+        #region Constructors
         public AbsoluteUrl
             (
         string scheme,
@@ -40,24 +43,30 @@ namespace Urls
             UserInfo = absoluteUrl.UserInfo;
         }
 
+        //TODO: Parse the string instead of converting to a Uri first
 #pragma warning disable CA1054 // URI-like parameters should not be strings
         public AbsoluteUrl(string uriString) : this(new Uri(uriString).ToAbsoluteUrl())
 #pragma warning restore CA1054 // URI-like parameters should not be strings
         {
         }
+        #endregion
 
+        #region Public Methods
         public override string ToString()
         =>
         $"{Scheme}://" + UserInfo +
         $"{Host}" +
         (Port.HasValue ? $":{Port.Value}" : "") +
         RelativeUrl;
+        #endregion
 
+        #region Operators
         public static implicit operator Uri(AbsoluteUrl absoluteUrl) =>
             absoluteUrl == null ? Empty :
             new Uri(absoluteUrl.ToString());
 
         public static explicit operator AbsoluteUrl(Uri uri) => uri.ToAbsoluteUrl();
+        #endregion
     }
 }
 
