@@ -56,7 +56,9 @@ member this.TestComposition () =
       Assert.AreEqual("http://username:password@host.com:5000/pathpart1/pathpart2?fieldname1=field%3C%3EValue1&FieldName2=field%3C%3EValue2#frag",uri.ToString());
 ```
 
-#### Pass Url as `System.Uri`
+#### Pass `AbsoluteUrl` as `System.Uri`
+
+Automatically convert between `System.Uri` and back
 
 ```cs
 public static HttpClient GetHttpClientWithAbsoluteUrl
@@ -64,6 +66,8 @@ public static HttpClient GetHttpClientWithAbsoluteUrl
         .AddQueryParameter(FieldName1, FieldValue1));
 
 public static HttpClient GetHttpClient(Uri uri) => new() { BaseAddress = uri };
+
+public static Uri GetUri() => new AbsoluteUrl("http", "host.com").ToUri();
 ```
 
 #### Quality First
