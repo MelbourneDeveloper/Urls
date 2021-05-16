@@ -56,6 +56,16 @@ member this.TestComposition () =
       Assert.AreEqual("http://username:password@host.com:5000/pathpart1/pathpart2?fieldname1=field%3C%3EValue1&FieldName2=field%3C%3EValue2#frag",uri.ToString());
 ```
 
+#### Pass Url as `System.Uri`
+
+```cs
+public static HttpClient GetHttpClientWithAbsoluteUrl
+    => GetHttpClient(new AbsoluteUrl("http", "host.com")
+        .AddQueryParameter(FieldName1, FieldValue1));
+
+public static HttpClient GetHttpClient(Uri uri) => new() { BaseAddress = uri };
+```
+
 #### Quality First
 
 ![Code Coverage](https://github.com/MelbourneDeveloper/Urls/blob/main/Images/CodeCoverage.png) 
