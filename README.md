@@ -77,5 +77,3 @@ public static Uri GetUri() => new AbsoluteUrl("http", "host.com").ToUri();
 ![Code Coverage](https://github.com/MelbourneDeveloper/Urls/blob/main/Images/CodeCoverage.png) 
 ![Mutation Score](https://github.com/MelbourneDeveloper/Urls/blob/main/Images/MutationScore.png)
 
-
-
