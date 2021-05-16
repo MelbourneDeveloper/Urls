@@ -11,6 +11,8 @@ Nuget: [Urls](https://www.nuget.org/packages/Urls)
 
 Urls is a .NET library of [records](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/records) that represent Urls. All properties are immutable, and there are a collection of Fluent API style extension methods to make Url construction easy. I designed this library with F# in mind. Use the [non-destructive mutation](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/records#non-destructive-mutation) (`with`) syntax to create new Urls easily and make HTTP calls with [RestClient.Net](https://github.com/MelbourneDeveloper/RestClient.Net/tree/5/develop). 
 
+See all samples in the unit tests [here](https://github.com/MelbourneDeveloper/Urls/blob/ab57a866d27cb5653b97ca6fcf8fe51242d5b274/src/Uris.Tests/UriTests.cs#L38).
+
 #### C#
 
 ```cs
