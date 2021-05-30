@@ -23,7 +23,7 @@ private readonly string expected = $"{Scheme}://{Username}:{Password}@{Host}:{Po
 public void TestComposition()
 {
     var absoluteUrl =
-        Host.ToHttpUriFromHost(Port)
+        Host.ToHttpUrlFromHost(Port)
         .AddQueryParameter(FieldName1, FieldValue1)
         .WithCredentials(Username, Password)
         .AddQueryParameter(FieldName2, FieldValue2)
