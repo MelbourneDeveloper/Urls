@@ -18,3 +18,5 @@ src/.idea/*
 
 *.user
 
+
+.DS_Store

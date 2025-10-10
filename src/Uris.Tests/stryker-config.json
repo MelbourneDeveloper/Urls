@@ -1,21 +1,8 @@
 {
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/src/Stryker.CLI/Stryker.CLI/schema.json",
   "stryker-config": {
-    "reporters": [
-      "progress",
-      "html"
-    ],
-    "log-level": "info",
-    "log-file": true,
-    "timeout-ms": 10000,
-    "project-file": "Urls.csproj",
-    "max-concurrent-test-runners": 4,
-    "threshold-high": 80,
-    "threshold-low": 70,
-    "threshold-break": 60,
-    "mutation-level": "Complete",
-    "excluded-mutations": [
-    ],
     "ignore-methods": [
+      "*ConfigureAwait"
     ]
   }
 }
