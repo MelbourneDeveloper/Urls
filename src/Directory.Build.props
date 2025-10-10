@@ -24,5 +24,7 @@
 	    <PackageTags>Uri Url</PackageTags>
 	    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<RepositoryUrl>https://github.com/MelbourneDeveloper/Urls</RepositoryUrl>
+		<NoWarn>$(NoWarn);IDE0301;IDE0303;IDE0305</NoWarn>
+		<WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0301;IDE0303;IDE0305</WarningsNotAsErrors>
 	</PropertyGroup>
 </Project>

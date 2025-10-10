@@ -14,15 +14,14 @@ namespace Urls
         #endregion
 
         #region Public Properties
-        public static ImmutableList<QueryParameter> EmptyList { get; } = ImmutableList<QueryParameter>.Empty;
+        public static ImmutableList<QueryParameter> EmptyList { get; } =
+            ImmutableList<QueryParameter>.Empty;
 
         public string FieldName { get; init; }
         public string? Value
         {
-            get => fieldValue; init
-            {
-                fieldValue = WebUtility.UrlDecode(value);
-            }
+            get => fieldValue;
+            init { fieldValue = WebUtility.UrlDecode(value); }
         }
         #endregion
 
@@ -35,9 +34,8 @@ namespace Urls
         #endregion
 
         #region Public Methods
-        public override string ToString()
-            => $"{FieldName}{(Value != null ? "=" : "")}{WebUtility.UrlEncode(Value)}";
+        public override string ToString() =>
+            $"{FieldName}{(Value != null ? "=" : "")}{WebUtility.UrlEncode(Value)}";
         #endregion
     }
 }
-

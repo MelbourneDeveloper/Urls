@@ -53,6 +53,9 @@ dotnet_diagnostic.CS8767.severity = error
 
 ######################## Disable #################
 
+
+dotnet_diagnostic.IDE0055.severity = None
+
 # Modify 'Start' to catch a more specific allowed exception type, or rethrow the exception
 dotnet_diagnostic.CA1031.severity = None
 
