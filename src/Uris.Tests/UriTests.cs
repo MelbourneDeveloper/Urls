@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -225,10 +226,7 @@ public class UrlTests
             absoluteRelativeUrl.RelativeUrl.QueryParameters.First().FieldName
         );
 
-        Assert.AreEqual(
-            FieldValue1,
-            absoluteRelativeUrl.RelativeUrl.QueryParameters.First().Value
-        );
+        Assert.AreEqual(FieldValue1, absoluteRelativeUrl.RelativeUrl.QueryParameters.First().Value);
     }
 
     [TestMethod]
@@ -273,7 +271,7 @@ public class UrlTests
 
         Assert.AreEqual(item.somelongstring, relativeUrl.QueryParameters[0].Value);
         Assert.AreEqual(nameof(item.somelongstring), relativeUrl.QueryParameters[0].FieldName);
-        Assert.AreEqual(item.count.ToString(), relativeUrl.QueryParameters[1].Value);
+        Assert.AreEqual(item.count.ToString(CultureInfo.InvariantCulture), relativeUrl.QueryParameters[1].Value);
         Assert.AreEqual(nameof(item.count), relativeUrl.QueryParameters[1].FieldName);
         Assert.AreEqual(item.message, relativeUrl.QueryParameters[2].Value);
         Assert.AreEqual(nameof(item.message), relativeUrl.QueryParameters[2].FieldName);
@@ -471,8 +469,7 @@ public class UrlTests
         Assert.AreEqual(RelativeUrl.Empty, new RelativeUrl((RelativeUrl)null));
 
     [TestMethod]
-    public void TestUserInfoNullIsEmpty() =>
-        Assert.AreEqual(UserInfo.Empty, new UserInfo(null));
+    public void TestUserInfoNullIsEmpty() => Assert.AreEqual(UserInfo.Empty, new UserInfo(null));
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
