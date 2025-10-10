@@ -1,14 +1,20 @@
 ﻿[*.cs]
 
-dotnet_diagnostic.CA2237.severity = None
+# IDE0160: Convert to block scoped namespace
+csharp_style_namespace_declarations = file_scoped
 
-dotnet_diagnostic.CA1014.severity = None
-
-
-#Why doesn't this setting work?
-#csharp_style_expression_bodied_local_functions = true;
-dotnet_diagnostic.IDE0061.severity = none
-
+dotnet_analyzer_diagnostic.category-Usage.severity = error
+dotnet_analyzer_diagnostic.category-Reliability.severity = error
+dotnet_analyzer_diagnostic.category-Design.severity = error
+dotnet_analyzer_diagnostic.category-Naming.severity = error
+dotnet_analyzer_diagnostic.category-Maintainability.severity = error
+dotnet_analyzer_diagnostic.category-Performance.severity = error
+dotnet_analyzer_diagnostic.category-Interoperability.severity = error
+dotnet_analyzer_diagnostic.category-Security.severity = error
+dotnet_analyzer_diagnostic.category-Globalization.severity = error
+dotnet_analyzer_diagnostic.category-Documentation.severity = error
+dotnet_analyzer_diagnostic.category-Readability.severity = error
+dotnet_analyzer_diagnostic.category-Ordering.severity = error
 
 # Default severity for all analyzer diagnostics
 dotnet_analyzer_diagnostic.severity = error
@@ -803,3 +809,18 @@ dotnet_diagnostic.CA1816.severity = error
 
 # CA1063: Implement IDisposable Correctly
 dotnet_diagnostic.CA1063.severity = error
+
+dotnet_diagnostic.CA2237.severity = None
+
+dotnet_diagnostic.CA1014.severity = None
+
+#Why doesn't this setting work?
+#csharp_style_expression_bodied_local_functions = true;
+dotnet_diagnostic.IDE0061.severity = none
+
+dotnet_diagnostic.IDE0130.severity = none
+
+
+
+# IDE0160: Convert to block scoped namespace
+csharp_style_namespace_declarations = file_scoped
