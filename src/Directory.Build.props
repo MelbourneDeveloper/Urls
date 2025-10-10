@@ -13,7 +13,8 @@
 		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzers>true</RunAnalyzers>
 		<Nullable>enable</Nullable>
-        <Version>1.0.0</Version>
+		<LangVersion>Latest</LangVersion>
+		<Version>1.0.0</Version>
 	    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
 	    <Authors>Christian Findlay</Authors>
@@ -24,15 +25,17 @@
 	    <PackageTags>Uri Url</PackageTags>
 	    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<RepositoryUrl>https://github.com/MelbourneDeveloper/Urls</RepositoryUrl>
-		<NoWarn>$(NoWarn);IDE0301;IDE0303;IDE0305</NoWarn>
+		<NoWarn>$(NoWarn);IDE0301;IDE0303;IDE0305;CA1515</NoWarn>
 		<WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0301;IDE0303;IDE0305</WarningsNotAsErrors>
 	</PropertyGroup>
-	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.9.0">
-		<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	</PackageReference>
-	<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
-		<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	</PackageReference>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.9.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 </Project>

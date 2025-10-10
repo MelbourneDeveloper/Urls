@@ -60,6 +60,9 @@ dotnet_diagnostic.CS8767.severity = error
 ######################## Disable #################
 
 
+dotnet_diagnostic.CA1515.severity = None
+
+
 dotnet_diagnostic.IDE0055.severity = None
 
 # Modify 'Start' to catch a more specific allowed exception type, or rethrow the exception
@@ -194,9 +197,6 @@ dotnet_diagnostic.CA1060.severity = error
 
 # CA1061: Do not hide base class methods
 dotnet_diagnostic.CA1061.severity = error
-
-# CA1062: Validate arguments of public methods
-dotnet_diagnostic.CA1062.severity = error
 
 # CA1064: Exceptions should be public
 dotnet_diagnostic.CA1064.severity = error
@@ -820,7 +820,8 @@ dotnet_diagnostic.IDE0061.severity = none
 
 dotnet_diagnostic.IDE0130.severity = none
 
-
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
 
 # IDE0160: Convert to block scoped namespace
 csharp_style_namespace_declarations = file_scoped
