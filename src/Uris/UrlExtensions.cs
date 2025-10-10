@@ -37,7 +37,13 @@ namespace Urls
                     )
                     : UserInfo.Empty;
 
-            return new AbsoluteUrl(uri.Scheme, uri.Host, uri.Port, relativeUrl, userInfo);
+            // Only include port if it's not the default port OR if it was explicitly specified in the URL
+            var isDefaultPort = (uri.Scheme == "http" && uri.Port == 80) ||
+                                (uri.Scheme == "https" && uri.Port == 443);
+            var portWasExplicit = uri.OriginalString.Contains($":{uri.Port}", StringComparison.Ordinal);
+            var port = (isDefaultPort && !portWasExplicit) ? (int?)null : uri.Port;
+
+            return new AbsoluteUrl(uri.Scheme, uri.Host, port, relativeUrl, userInfo);
         }
 
         public static RelativeUrl ToRelativeUrl(this Uri uri)
@@ -132,16 +138,23 @@ namespace Urls
         public static AbsoluteUrl WithRelativeUrl(
             this AbsoluteUrl absoluteUrl,
             RelativeUrl relativeUrl
-        ) =>
-            absoluteUrl == null
-                ? throw new ArgumentNullException(nameof(absoluteUrl))
-                : new AbsoluteUrl(
-                    absoluteUrl.Scheme,
-                    absoluteUrl.Host,
-                    absoluteUrl.Port,
-                    relativeUrl,
-                    absoluteUrl.UserInfo
-                );
+        )
+        {
+            _ = absoluteUrl ?? throw new ArgumentNullException(nameof(absoluteUrl));
+            _ = relativeUrl ?? throw new ArgumentNullException(nameof(relativeUrl));
+
+            return new AbsoluteUrl(
+                absoluteUrl.Scheme,
+                absoluteUrl.Host,
+                absoluteUrl.Port,
+                new RelativeUrl(
+                    absoluteUrl.RelativeUrl.Path.AddRange(relativeUrl.Path),
+                    relativeUrl.QueryParameters,
+                    relativeUrl.Fragment
+                ),
+                absoluteUrl.UserInfo
+            );
+        }
 
         public static RelativeUrl WithFragment(this RelativeUrl relativeUrl, string fragment) =>
             relativeUrl == null

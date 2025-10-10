@@ -434,6 +434,15 @@ namespace Urls.Tests
         }
 
         [TestMethod]
+        public void TestWithRelative3()
+        {
+            const string urlString = "https://localhost:44337/JsonPerson";
+            var baseUri = new AbsoluteUrl(urlString);
+            var completeUri = baseUri.AddQueryParameter("personKey", "abc");
+            Assert.AreEqual($"{urlString}?personKey=abc", completeUri.ToString());
+        }
+
+        [TestMethod]
         public void TestAppendPath()
         {
             const string urlString = "http://www.test.com:80/test";
