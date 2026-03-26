@@ -110,8 +110,11 @@ public class UrlTests
     public void TestLocalFunctionToUri()
     {
         static AbsoluteUrl SomeFunctionTakingAUri(Uri uri) => uri.ToAbsoluteUrl();
+        // Port 443 is default for HTTPS, so it will be normalized to null
         var absoluteUrl = "www.test.com".ToHttpsUrlFromHost().WithPort(443);
-        Assert.AreEqual(absoluteUrl, SomeFunctionTakingAUri(absoluteUrl));
+        var result = SomeFunctionTakingAUri(absoluteUrl);
+        // After round-tripping through Uri, default port 443 is stripped
+        Assert.AreEqual("https://www.test.com", result.ToString());
     }
 
     [TestMethod]
@@ -344,6 +347,62 @@ public class UrlTests
     }
 
     [TestMethod]
+    public void TestQueryParameterWithEmptyValue()
+    {
+        // Test query parameter with = but no value (empty string)
+        var relativeUrl = "?key=".ToRelativeUrl();
+        Assert.AreEqual("key", relativeUrl.QueryParameters[0].FieldName);
+        Assert.AreEqual("", relativeUrl.QueryParameters[0].Value);
+    }
+
+    [TestMethod]
+    public void TestQueryParameterWithoutEquals()
+    {
+        // Test query parameter without = sign (just key)
+        var relativeUrl = "?key".ToRelativeUrl();
+        Assert.AreEqual("key", relativeUrl.QueryParameters[0].FieldName);
+        Assert.AreEqual(null, relativeUrl.QueryParameters[0].Value);
+    }
+
+    [TestMethod]
+    public void TestQueryParameterWithMultipleEquals()
+    {
+        // Test query parameter with multiple = signs
+        var relativeUrl = "?key=value=extra".ToRelativeUrl();
+        Assert.AreEqual("key", relativeUrl.QueryParameters[0].FieldName);
+        Assert.AreEqual("value", relativeUrl.QueryParameters[0].Value);
+    }
+
+    [TestMethod]
+    public void TestMultipleQueryParameters()
+    {
+        // Test multiple query parameters
+        var relativeUrl = "?a=1&b=2&c=3".ToRelativeUrl();
+        Assert.AreEqual(3, relativeUrl.QueryParameters.Count);
+        Assert.AreEqual("a", relativeUrl.QueryParameters[0].FieldName);
+        Assert.AreEqual("1", relativeUrl.QueryParameters[0].Value);
+        Assert.AreEqual("b", relativeUrl.QueryParameters[1].FieldName);
+        Assert.AreEqual("2", relativeUrl.QueryParameters[1].Value);
+        Assert.AreEqual("c", relativeUrl.QueryParameters[2].FieldName);
+        Assert.AreEqual("3", relativeUrl.QueryParameters[2].Value);
+    }
+
+    [TestMethod]
+    public void TestQueryParameterFromUri()
+    {
+        // Test parsing query parameters from Uri
+        var uri = new Uri("http://example.com?key1=val1&key2=&key3", UriKind.Absolute);
+        var absoluteUrl = uri.ToAbsoluteUrl();
+        Assert.AreEqual(3, absoluteUrl.RelativeUrl.QueryParameters.Count);
+        Assert.AreEqual("key1", absoluteUrl.RelativeUrl.QueryParameters[0].FieldName);
+        Assert.AreEqual("val1", absoluteUrl.RelativeUrl.QueryParameters[0].Value);
+        Assert.AreEqual("key2", absoluteUrl.RelativeUrl.QueryParameters[1].FieldName);
+        Assert.AreEqual("", absoluteUrl.RelativeUrl.QueryParameters[1].Value);
+        Assert.AreEqual("key3", absoluteUrl.RelativeUrl.QueryParameters[2].FieldName);
+        Assert.AreEqual(null, absoluteUrl.RelativeUrl.QueryParameters[2].Value);
+    }
+
+    [TestMethod]
     public void TestRelativeUrlConstructors()
     {
         var RelativeUrl = "a/a".ToRelativeUrl();
@@ -434,10 +493,12 @@ public class UrlTests
     [TestMethod]
     public void TestAppendPath()
     {
+        // Port 80 is default for HTTP and will be stripped during parsing
         const string urlString = "http://www.test.com:80/test";
         var baseUri = new AbsoluteUrl(urlString);
         var completeUri = baseUri.AppendPath("test");
-        Assert.AreEqual($"http://www.test.com:80/test/test", completeUri.ToString());
+        // Default port 80 is not shown in output
+        Assert.AreEqual($"http://www.test.com/test/test", completeUri.ToString());
     }
 
     [TestMethod]
@@ -445,6 +506,55 @@ public class UrlTests
         Assert.IsTrue(
             (new UserInfo("a", "b") with { Username = "b" }).Equals(new UserInfo("b", "b"))
         );
+
+    [TestMethod]
+    public void TestUserInfoWithUsernameOnly()
+    {
+        // Test parsing URI with username but no password (no colon)
+        var uri = new Uri("http://bob@www.hotmail.com", UriKind.Absolute);
+        var absoluteUrl = uri.ToAbsoluteUrl();
+        Assert.AreEqual("bob", absoluteUrl.UserInfo.Username);
+        Assert.AreEqual("", absoluteUrl.UserInfo.Password);
+    }
+
+    [TestMethod]
+    public void TestUserInfoWithEmptyPassword()
+    {
+        // Test parsing URI with username: (colon but no password)
+        var uri = new Uri("http://alice:@www.hotmail.com", UriKind.Absolute);
+        var absoluteUrl = uri.ToAbsoluteUrl();
+        Assert.AreEqual("alice", absoluteUrl.UserInfo.Username);
+        Assert.AreEqual("", absoluteUrl.UserInfo.Password);
+    }
+
+    [TestMethod]
+    public void TestUserInfoWithBothUsernameAndPassword()
+    {
+        // Test parsing URI with both username and password
+        var uri = new Uri("http://user:pass123@www.hotmail.com", UriKind.Absolute);
+        var absoluteUrl = uri.ToAbsoluteUrl();
+        Assert.AreEqual("user", absoluteUrl.UserInfo.Username);
+        Assert.AreEqual("pass123", absoluteUrl.UserInfo.Password);
+    }
+
+    [TestMethod]
+    public void TestUserInfoWithMultipleColons()
+    {
+        // Test parsing URI with password containing colons
+        var uri = new Uri("http://user:pa:ss:123@www.hotmail.com", UriKind.Absolute);
+        var absoluteUrl = uri.ToAbsoluteUrl();
+        Assert.AreEqual("user", absoluteUrl.UserInfo.Username);
+        Assert.AreEqual("pa", absoluteUrl.UserInfo.Password);
+    }
+
+    [TestMethod]
+    public void TestNoUserInfo()
+    {
+        // Test parsing URI without any userInfo
+        var uri = new Uri("http://www.hotmail.com", UriKind.Absolute);
+        var absoluteUrl = uri.ToAbsoluteUrl();
+        Assert.AreEqual(UserInfo.Empty, absoluteUrl.UserInfo);
+    }
 
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.

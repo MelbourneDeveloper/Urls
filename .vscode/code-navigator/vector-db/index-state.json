@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "fileHashes": {
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris/UserInfo.cs": "8dc6965720187227890204d122791be7ceae4bc85a0f2667a364954a5e434353",
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris/RelativeUrl.cs": "4b3e6ac485a39ca1d0e581b00cd0d46335152d398eb47b980f1d3545e796c4f2",
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris/QueryParameter.cs": "45644a58828648ce3c75ca7491644edbdb5a84249d489d278d48aa7079929cd7",
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris/UrlExtensions.cs": "efb8356c617ddcc173b2267cadc75f0f3c0bcfcfe213330ba6e68cdc3f2a7b79",
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris/IsExternalInit.cs": "fd984919588346de2f0315a4048f09485f3023aae3199e270706fbf5e44d7c5e",
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris.Tests/UriTests.cs": "41d581fc25e03fe41d3745508dd463740395ce649fff714de64a4014f2999320",
+    "/Users/christianfindlay/Documents/Code/Urls/src/Uris/AbsoluteUrl.cs": "e3fcb5b423bcbd00a092de424a975b80dafecbbbb7e86d4640cb6665ff97f35f"
+  },
+  "lastIndexed": "2025-11-09T07:08:48.496Z",
+  "stats": {
+    "totalNodes": 97,
+    "indexedNodes": 97,
+    "failedNodes": 0,
+    "timeElapsed": 4805,
+    "errors": [],
+    "lastIndexed": "2025-11-09T07:08:43.687Z"
+  }
+}

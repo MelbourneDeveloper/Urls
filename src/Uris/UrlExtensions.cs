@@ -19,6 +19,9 @@ public static class UrlExtensions
 
     public static AbsoluteUrl ToAbsoluteUrl(this Uri uri)
     {
+        if (uri == null)
+            throw new ArgumentNullException(nameof(uri));
+
         if (!uri.IsAbsoluteUri)
             throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
@@ -34,11 +37,21 @@ public static class UrlExtensions
                 )
                 : UserInfo.Empty;
 
-        return new AbsoluteUrl(uri.Scheme, uri.Host, uri.Port, relativeUrl, userInfo);
+        // Don't store default ports (80 for HTTP, 443 for HTTPS)
+        var port = uri.Port;
+        if ((uri.Scheme == "http" && port == 80) || (uri.Scheme == "https" && port == 443))
+        {
+            port = 0; // Will be converted to null
+        }
+
+        return new AbsoluteUrl(uri.Scheme, uri.Host, port == 0 ? null : port, relativeUrl, userInfo);
     }
 
     public static RelativeUrl ToRelativeUrl(this Uri uri)
     {
+        if (uri == null)
+            throw new ArgumentNullException(nameof(uri));
+
         if (!uri.IsAbsoluteUri)
             throw new InvalidOperationException(ErrorMessageMustBeAbsolute);
 
@@ -76,6 +89,9 @@ public static class UrlExtensions
 
     public static RelativeUrl ToRelativeUrl(this string relativeUrlString)
     {
+        if (relativeUrlString == null)
+            throw new ArgumentNullException(nameof(relativeUrlString));
+
         if (string.IsNullOrEmpty(relativeUrlString))
             return RelativeUrl.Empty;
 
@@ -122,16 +138,35 @@ public static class UrlExtensions
     public static AbsoluteUrl WithRelativeUrl(
         this AbsoluteUrl absoluteUrl,
         RelativeUrl relativeUrl
-    ) =>
-        absoluteUrl == null
-            ? throw new ArgumentNullException(nameof(absoluteUrl))
-            : new AbsoluteUrl(
-                absoluteUrl.Scheme,
-                absoluteUrl.Host,
-                absoluteUrl.Port,
-                relativeUrl,
-                absoluteUrl.UserInfo
-            );
+    )
+    {
+        if (absoluteUrl == null)
+            throw new ArgumentNullException(nameof(absoluteUrl));
+
+        // If the relative URL's path is the same as or starts with the base path,
+        // use it as-is (for query string modifications). Otherwise, append paths.
+        var basePath = absoluteUrl.RelativeUrl.Path;
+        var newPath = relativeUrl.Path;
+
+        var combinedPath = basePath.Count > 0 && newPath.Count > 0 &&
+            !newPath.Take(basePath.Count).SequenceEqual(basePath)
+                ? basePath.AddRange(newPath)
+                : newPath;
+
+        var combinedRelativeUrl = new RelativeUrl(
+            combinedPath,
+            relativeUrl.QueryParameters,
+            relativeUrl.Fragment
+        );
+
+        return new AbsoluteUrl(
+            absoluteUrl.Scheme,
+            absoluteUrl.Host,
+            absoluteUrl.Port,
+            combinedRelativeUrl,
+            absoluteUrl.UserInfo
+        );
+    }
 
     public static RelativeUrl WithFragment(this RelativeUrl relativeUrl, string fragment) =>
         relativeUrl == null
