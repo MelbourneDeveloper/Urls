@@ -4,7 +4,9 @@
 		<TargetFrameworks>netstandard2.0;net45;net5.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<LangVersion>Latest</LangVersion>
-		<Version>0.2.0-alpha</Version>
+		<Version>0.3.0-alpha</Version>
+		<AssemblyVersion>0.3.0.0</AssemblyVersion>
+		<FileVersion>0.3.0.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
